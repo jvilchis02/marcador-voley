@@ -2,535 +2,109 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Marcador Vóley">
 <title>Marcador Voleibol Pro</title>
 <style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  }
-  html, body {
-    width: 100%;
-    height: 100%;
-    height: 100dvh;
-    background: #0f172a;
-    color: #f8fafc;
-    overflow: hidden;
-  }
-  body {
-    display: flex;
-    flex-direction: column;
-    padding: 10px 14px;
-    gap: 10px;
-  }
-  .topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #1e293b;
-    flex-shrink: 0;
-  }
-  .brand {
-    font-weight: 800;
-    font-size: clamp(16px, 2.2vh, 24px);
-    color: #38bdf8;
-    letter-spacing: 0.5px;
-  }
-  .top-actions {
-    display: flex;
-    gap: 8px;
-  }
-  .btn-top {
-    background: #1e293b;
-    color: #e2e8f0;
-    border: 1px solid #334155;
-    border-radius: 10px;
-    padding: 8px 14px;
-    font-size: clamp(13px, 1.8vh, 18px);
-    font-weight: 700;
-    cursor: pointer;
-  }
-  .btn-top:active {
-    transform: scale(0.95);
-    background: #334155;
-  }
-  .board {
-    display: flex;
-    flex: 1;
-    gap: 14px;
-    min-height: 0;
-    width: 100%;
-  }
-  .team-card {
-    flex: 1.4;
-    background: #1e293b;
-    border-radius: 18px;
-    padding: 14px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    min-width: 0;
-  }
-  .team-card.loc { border-top: 8px solid #3b82f6; }
-  .team-card.vis { border-top: 8px solid #ef4444; }
-  .team-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    flex-shrink: 0;
-  }
-  .serve-icon {
-    font-size: clamp(22px, 3.5vh, 36px);
-    opacity: 0.2;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.2s;
-  }
-  .serve-icon.on {
-    opacity: 1;
-    transform: scale(1.15);
-  }
-  input.team-name {
-    background: transparent;
-    border: none;
-    border-bottom: 2px dashed #475569;
-    color: #ffffff;
-    font-size: clamp(20px, 3.5vh, 38px);
-    font-weight: 800;
-    text-align: center;
-    width: 78%;
-    user-select: auto;
-    -webkit-user-select: auto;
-    outline: none;
-  }
-  .score-display {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    font-size: min(36vh, 25vw);
-    font-weight: 900;
-    line-height: 0.9;
-    cursor: pointer;
-    letter-spacing: -2px;
-  }
-  .loc .score-display { color: #60a5fa; }
-  .vis .score-display { color: #f87171; }
-  .score-controls {
-    display: flex;
-    gap: 12px;
-    width: 100%;
-    flex-shrink: 0;
-  }
-  .btn-plus {
-    flex: 2.2;
-    padding: clamp(12px, 2.2vh, 24px);
-    font-size: clamp(24px, 4vh, 42px);
-    font-weight: 900;
-    border: none;
-    border-radius: 14px;
-    color: #ffffff;
-    cursor: pointer;
-  }
-  .loc .btn-plus { background: #2563eb; }
-  .vis .btn-plus { background: #dc2626; }
-  .btn-minus {
-    flex: 1;
-    padding: clamp(12px, 2.2vh, 24px);
-    background: #334155;
-    color: #cbd5e1;
-    border: none;
-    border-radius: 14px;
-    font-size: clamp(22px, 3.5vh, 36px);
-    font-weight: 800;
-    cursor: pointer;
-  }
-  .btn-plus:active, .btn-minus:active {
-    transform: scale(0.96);
-  }
-  .timeout-bar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 10px;
-    font-size: clamp(13px, 2vh, 20px);
-    font-weight: 700;
-    color: #94a3b8;
-    flex-shrink: 0;
-  }
-  .to-dot {
-    width: clamp(22px, 3vh, 32px);
-    height: clamp(22px, 3vh, 32px);
-    border-radius: 50%;
-    background: #334155;
-    border: 2px solid #64748b;
-    cursor: pointer;
-  }
-  .to-dot.used {
-    background: #eab308;
-    border-color: #fef08a;
-  }
-  .center-panel {
-    flex: 0.85;
-    background: #1e293b;
-    border-radius: 18px;
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    min-width: 190px;
-  }
-  .sets-header {
-    text-align: center;
-    width: 100%;
-  }
-  .sets-label {
-    font-size: clamp(11px, 1.6vh, 16px);
-    letter-spacing: 1.5px;
-    color: #94a3b8;
-    font-weight: 800;
-  }
-  .sets-counter {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    font-size: clamp(38px, 6.5vh, 68px);
-    font-weight: 900;
-    margin: 4px 0;
-  }
-  .btn-set {
-    background: #334155;
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    width: clamp(28px, 4vh, 42px);
-    height: clamp(28px, 4vh, 42px);
-    font-size: clamp(18px, 2.5vh, 26px);
-    font-weight: 800;
-    cursor: pointer;
-  }
-  .win-banner {
-    background: #059669;
-    color: #ffffff;
-    padding: 10px;
-    border-radius: 12px;
-    font-size: clamp(13px, 2vh, 18px);
-    font-weight: 800;
-    text-align: center;
-    width: 100%;
-    display: none;
-    cursor: pointer;
-    animation: pulse 1.5s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.03); }
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: clamp(13px, 2vh, 19px);
-    text-align: center;
-  }
-  th {
-    color: #94a3b8;
-    padding: 4px;
-    border-bottom: 2px solid #334155;
-  }
-  td {
-    padding: 5px 4px;
-    border-bottom: 1px solid #0f172a;
-  }
-  .active-set {
-    background: #273549;
-    font-weight: 800;
-    color: #38bdf8;
-  }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif}
+html,body{width:100%;height:100%;background:#0f172a;color:#f8fafc;overflow:hidden}
+body{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;padding:10px 14px}
+.bar{display:-webkit-flex;display:flex;-webkit-justify-content:space-between;justify-content:space-between;-webkit-align-items:center;align-items:center;padding-bottom:8px;border-bottom:1px solid #1e293b;height:48px}
+.btn-top{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:7px 12px;font-size:14px;font-weight:700;cursor:pointer;margin-left:6px}
+.main{display:-webkit-flex;display:flex;-webkit-flex:1;flex:1;padding-top:10px;height:calc(100% - 48px)}
+.team{-webkit-flex:1.4;flex:1.4;background:#1e293b;border-radius:16px;padding:12px 16px;display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-justify-content:space-between;justify-content:space-between;-webkit-align-items:center;align-items:center;margin:0 6px}
+.team.loc{border-top:6px solid #3b82f6}
+.team.vis{border-top:6px solid #ef4444}
+.t-head{display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;width:100%;-webkit-justify-content:center;justify-content:center}
+input.name{background:transparent;border:none;border-bottom:2px dashed #475569;color:#fff;font-size:26px;font-weight:800;text-align:center;width:75%;-webkit-user-select:auto;user-select:auto}
+.serve{font-size:26px;opacity:.25;cursor:pointer;margin-right:8px}
+.serve.on{opacity:1}
+.pts{font-size:220px;font-weight:900;line-height:1;cursor:pointer;margin:auto 0;letter-spacing:-6px}
+.loc .pts{color:#60a5fa}
+.vis .pts{color:#f87171}
+.ctrls{display:-webkit-flex;display:flex;width:100%;height:64px}
+.btn-p{-webkit-flex:2.5;flex:2.5;font-size:30px;font-weight:900;border:none;border-radius:12px;color:#fff;cursor:pointer;margin-right:10px}
+.loc .btn-p{background:#2563eb}
+.vis .btn-p{background:#dc2626}
+.btn-m{-webkit-flex:1;flex:1;background:#334155;color:#cbd5e1;border:none;border-radius:12px;font-size:26px;font-weight:800;cursor:pointer}
+.to-row{display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;margin-top:10px;font-size:15px;font-weight:700;color:#94a3b8}
+.to-dot{width:24px;height:24px;border-radius:50%;background:#334155;border:2px solid #64748b;cursor:pointer;margin-left:8px}
+.to-dot.used{background:#eab308;border-color:#fef08a}
+.center{-webkit-flex:0.9;flex:0.9;background:#1e293b;border-radius:16px;padding:12px;display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-justify-content:space-between;justify-content:space-between;-webkit-align-items:center;align-items:center;margin:0 4px}
+.sets-box{text-align:center;width:100%}
+.sets-lbl{font-size:13px;letter-spacing:1.5px;color:#94a3b8;font-weight:800}
+.sets-num{display:-webkit-flex;display:flex;-webkit-justify-content:center;justify-content:center;-webkit-align-items:center;align-items:center;font-size:54px;font-weight:900;margin:6px 0}
+.set-btn{background:#334155;color:#fff;border:none;border-radius:8px;width:36px;height:36px;font-size:22px;font-weight:800;margin:0 6px}
+table{width:100%;border-collapse:collapse;font-size:16px;text-align:center}
+th{color:#94a3b8;padding:5px;border-bottom:2px solid #334155}
+td{padding:7px 4px;border-bottom:1px solid #0f172a;font-weight:700}
+.act-set{background:#273549;font-weight:900;color:#38bdf8}
+.banner{background:#059669;color:#fff;padding:10px;border-radius:10px;font-size:15px;font-weight:800;text-align:center;width:100%;display:none;cursor:pointer}
+
+@media screen and (max-height: 500px) {
+  .bar{height:38px;padding-bottom:4px}
+  .btn-top{padding:4px 8px;font-size:12px}
+  .main{padding-top:6px;height:calc(100% - 38px)}
+  .team{padding:8px 10px}
+  input.name{font-size:18px}
+  .serve{font-size:18px}
+  .pts{font-size:115px;letter-spacing:-3px}
+  .ctrls{height:44px}
+  .btn-p{font-size:20px}
+  .btn-m{font-size:18px}
+  .to-row{margin-top:4px;font-size:12px}
+  .to-dot{width:18px;height:18px}
+  .sets-num{font-size:34px;margin:2px 0}
+  .set-btn{width:26px;height:26px;font-size:16px;margin:0 4px}
+  table{font-size:12px}
+  td{padding:3px 2px}
+}
 </style>
 </head>
 <body>
-  <div class="topbar">
-    <div class="brand">🏐 VÓLEY PRO</div>
-    <div class="top-actions">
-      <button class="btn-top" onclick="whistle()">📣 Silbato</button>
-      <button class="btn-top" id="sndBtn" onclick="toggleSnd()">🔊 ON</button>
-      <button class="btn-top" onclick="swapSides()">⇄ Lado</button>
-      <button class="btn-top" onclick="resetAll()">↺ Nuevo</button>
-    </div>
-  </div>
-
-  <div class="board" id="board">
-    <div class="team-card loc" id="box0">
-      <div class="team-header">
-        <span class="serve-icon on" id="srv0" onclick="setServe(0)">🏐</span>
-        <input class="team-name" id="n0" value="LOCAL" onchange="save()">
-      </div>
-      <div class="score-display" id="p0" onclick="addPt(0, 1)">0</div>
-      <div class="score-controls">
-        <button class="btn-plus" onclick="addPt(0, 1)">+1</button>
-        <button class="btn-minus" onclick="addPt(0, -1)">-1</button>
-      </div>
-      <div class="timeout-bar">
-        <span>TIEMPOS:</span>
-        <div class="to-dot" id="to0_0" onclick="togTO(0, 0)"></div>
-        <div class="to-dot" id="to0_1" onclick="togTO(0, 1)"></div>
-      </div>
-    </div>
-
-    <div class="center-panel">
-      <div class="sets-header">
-        <div class="sets-label">SETS GANADOS</div>
-        <div class="sets-counter">
-          <button class="btn-set" onclick="modSet(0, -1)">-</button>
-          <span id="s0" style="color:#60a5fa">0</span>
-          <button class="btn-set" onclick="modSet(0, 1)">+</button>
-          <span style="font-size:22px; color:#475569">-</span>
-          <button class="btn-set" onclick="modSet(1, -1)">-</button>
-          <span id="s1" style="color:#f87171">0</span>
-          <button class="btn-set" onclick="modSet(1, 1)">+</button>
-        </div>
-      </div>
-
-      <div class="win-banner" id="winBan" onclick="nextSet()">
-        ¡Set terminado!<br>Toca para Siguiente Set ➜
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Set</th>
-            <th>LOC</th>
-            <th>VIS</th>
-          </tr>
-        </thead>
-        <tbody id="hist"></tbody>
-      </table>
-    </div>
-
-    <div class="team-card vis" id="box1">
-      <div class="team-header">
-        <span class="serve-icon" id="srv1" onclick="setServe(1)">🏐</span>
-        <input class="team-name" id="n1" value="VISITANTE" onchange="save()">
-      </div>
-      <div class="score-display" id="p1" onclick="addPt(1, 1)">0</div>
-      <div class="score-controls">
-        <button class="btn-plus" onclick="addPt(1, 1)">+1</button>
-        <button class="btn-minus" onclick="addPt(1, -1)">-1</button>
-      </div>
-      <div class="timeout-bar">
-        <span>TIEMPOS:</span>
-        <div class="to-dot" id="to1_0" onclick="togTO(1, 0)"></div>
-        <div class="to-dot" id="to1_1" onclick="togTO(1, 1)"></div>
-      </div>
-    </div>
-  </div>
-
+<div class="bar">
+<div style="font-weight:900;font-size:18px;color:#38bdf8">🏐 VÓLEY PRO</div>
+<div>
+<button class="btn-top" onclick="whistle()">📣 Silbato</button>
+<button class="btn-top" id="sndBtn" onclick="toggleSnd()">🔊 ON</button>
+<button class="btn-top" onclick="swapSides()">⇄ Lado</button>
+<button class="btn-top" onclick="resetAll()">↺ Nuevo</button>
+</div>
+</div>
+<div class="main" id="board">
+<div class="team loc" id="box0">
+<div class="t-head"><span class="serve on" id="srv0" onclick="setServe(0)">🏐</span><input class="name" id="n0" value="LOCAL" onchange="save()"></div>
+<div class="pts" id="p0" onclick="addPt(0,1)">0</div>
+<div class="ctrls"><button class="btn-p" onclick="addPt(0,1)">+1</button><button class="btn-m" onclick="addPt(0,-1)">-1</button></div>
+<div class="to-row">T.O.:<div class="to-dot" id="to0_0" onclick="togTO(0,0)"></div><div class="to-dot" id="to0_1" onclick="togTO(0,1)"></div></div>
+</div>
+<div class="center">
+<div class="sets-box"><div class="sets-lbl">SETS GANADOS</div><div class="sets-num"><button class="set-btn" onclick="modSet(0,-1)">-</button><span id="s0" style="color:#60a5fa">0</span><button class="set-btn" onclick="modSet(0,1)">+</button><span style="font-size:24px;color:#475569;margin:0 4px">-</span><button class="set-btn" onclick="modSet(1,-1)">-</button><span id="s1" style="color:#f87171">0</span><button class="set-btn" onclick="modSet(1,1)">+</button></div></div>
+<div class="banner" id="winBan" onclick="nextSet()">¡Set terminado! Toca para Siguiente Set ➜</div>
+<table><thead><tr><th>Set</th><th>LOC</th><th>VIS</th></tr></thead><tbody id="hist"></tbody></table>
+</div>
+<div class="team vis" id="box1">
+<div class="t-head"><span class="serve" id="srv1" onclick="setServe(1)">🏐</span><input class="name" id="n1" value="VISITANTE" onchange="save()"></div>
+<div class="pts" id="p1" onclick="addPt(1,1)">0</div>
+<div class="ctrls"><button class="btn-p" onclick="addPt(1,1)">+1</button><button class="btn-m" onclick="addPt(1,-1)">-1</button></div>
+<div class="to-row">T.O.:<div class="to-dot" id="to1_0" onclick="togTO(1,0)"></div><div class="to-dot" id="to1_1" onclick="togTO(1,1)"></div></div>
+</div>
+</div>
 <script>
-  let st = {
-    cur: 0,
-    sets: [[0,0],[0,0],[0,0],[0,0],[0,0]],
-    won: [0,0],
-    srv: 0,
-    to: [[0,0],[0,0]],
-    snd: 1,
-    swapped: 0,
-    done: 0
-  };
-  let actx = null;
-
-  function audio() {
-    if (!st.snd) return null;
-    try {
-      if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
-      if (actx.state === 'suspended') actx.resume();
-      return actx;
-    } catch (e) { return null; }
-  }
-
-  function tone(f, d, t = 'sine', v = 0.3) {
-    const c = audio();
-    if (!c) return;
-    try {
-      const o = c.createOscillator(), g = c.createGain();
-      o.type = t;
-      o.frequency.value = f;
-      g.gain.setValueAtTime(v, c.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + d);
-      o.connect(g);
-      g.connect(c.destination);
-      o.start();
-      o.stop(c.currentTime + d);
-    } catch (e) {}
-  }
-
-  function whistle() {
-    const c = audio();
-    if (!c) return;
-    try {
-      const o = c.createOscillator(), l = c.createOscillator(), lg = c.createGain(), g = c.createGain();
-      o.type = 'triangle';
-      o.frequency.value = 2850;
-      l.frequency.value = 38;
-      lg.gain.value = 180;
-      l.connect(lg);
-      lg.connect(o.frequency);
-      g.gain.setValueAtTime(0.35, c.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.55);
-      o.connect(g);
-      g.connect(c.destination);
-      o.start();
-      l.start();
-      o.stop(c.currentTime + 0.55);
-      l.stop(c.currentTime + 0.55);
-    } catch (e) {}
-  }
-
-  function fanfare() {
-    [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => tone(f, 0.3, 'triangle', 0.3), i * 110));
-  }
-
-  function toggleSnd() {
-    st.snd = st.snd ? 0 : 1;
-    document.getElementById('sndBtn').textContent = st.snd ? '🔊 ON' : '🔇 OFF';
-    if (st.snd) tone(600, 0.1);
-    save();
-  }
-
-  function addPt(t, d) {
-    let v = st.sets[st.cur][t] + d;
-    if (v < 0) return;
-    st.sets[st.cur][t] = v;
-    if (d > 0) {
-      st.srv = t;
-      tone(t === 0 ? 660 : 520, 0.15);
-    } else {
-      tone(240, 0.12);
-    }
-    checkWin();
-    render();
-    save();
-  }
-
-  function checkWin() {
-    const a = st.sets[st.cur][0], b = st.sets[st.cur][1];
-    const lim = st.cur === 4 ? 15 : 25;
-    if ((a >= lim || b >= lim) && Math.abs(a - b) >= 2) {
-      if (!st.done) {
-        st.done = 1;
-        st.won[a > b ? 0 : 1]++;
-        whistle();
-        setTimeout(fanfare, 450);
-      }
-    } else {
-      st.done = 0;
-    }
-  }
-
-  function nextSet() {
-    if (st.cur < 4) {
-      st.cur++;
-      st.done = 0;
-      st.to = [[0,0],[0,0]];
-      whistle();
-      render();
-      save();
-    }
-  }
-
-  function modSet(t, d) {
-    st.won[t] = Math.max(0, st.won[t] + d);
-    render();
-    save();
-  }
-
-  function setServe(t) {
-    st.srv = t;
-    render();
-    save();
-  }
-
-  function togTO(t, i) {
-    st.to[t][i] = st.to[t][i] ? 0 : 1;
-    if (st.to[t][i]) whistle();
-    render();
-    save();
-  }
-
-  function swapSides() {
-    st.swapped = st.swapped ? 0 : 1;
-    document.getElementById('board').style.flexDirection = st.swapped ? 'row-reverse' : 'row';
-    save();
-  }
-
-  function resetAll() {
-    if (!confirm('¿Iniciar nuevo partido?')) return;
-    st.cur = 0;
-    st.sets = [[0,0],[0,0],[0,0],[0,0],[0,0]];
-    st.won = [0,0];
-    st.to = [[0,0],[0,0]];
-    st.done = 0;
-    whistle();
-    render();
-    save();
-  }
-
-  function render() {
-    document.getElementById('p0').textContent = st.sets[st.cur][0];
-    document.getElementById('p1').textContent = st.sets[st.cur][1];
-    document.getElementById('s0').textContent = st.won[0];
-    document.getElementById('s1').textContent = st.won[1];
-    document.getElementById('srv0').classList.toggle('on', st.srv === 0);
-    document.getElementById('srv1').classList.toggle('on', st.srv === 1);
-    [0, 1].forEach(t => [0, 1].forEach(i => document.getElementById(`to${t}_${i}`).classList.toggle('used', !!st.to[t][i])));
-    document.getElementById('winBan').style.display = (st.done && st.cur < 4) ? 'block' : 'none';
-    const tb = document.getElementById('hist');
-    tb.innerHTML = '';
-    st.sets.forEach((s, i) => {
-      const tr = document.createElement('tr');
-      if (i === st.cur) tr.className = 'active-set';
-      tr.innerHTML = `<td>S${i + 1}</td><td>${s[0]}</td><td>${s[1]}</td>`;
-      tb.appendChild(tr);
-    });
-  }
-
-  function save() {
-    try {
-      st.n0 = document.getElementById('n0').value;
-      st.n1 = document.getElementById('n1').value;
-      localStorage.setItem('vb_ipad_v1', JSON.stringify(st));
-    } catch (e) {}
-  }
-
-  function load() {
-    try {
-      const d = JSON.parse(localStorage.getItem('vb_ipad_v1'));
-      if (d) {
-        st = Object.assign(st, d);
-        if (st.n0) document.getElementById('n0').value = st.n0;
-        if (st.n1) document.getElementById('n1').value = st.n1;
-        document.getElementById('sndBtn').textContent = st.snd ? '🔊 ON' : '🔇 OFF';
-        if (st.swapped) document.getElementById('board').style.flexDirection = 'row-reverse';
-      }
-    } catch (e) {}
-    render();
-  }
-
-  load();
-</script>
-</body>
-</html>
+var st={cur:0,pA:new Array(0,0,0,0,0),pB:new Array(0,0,0,0,0),wA:0,wB:0,srv:0,tA:new Array(0,0),tB:new Array(0,0),snd:1,swapped:0,done:0};
+var actx=null;
+function audio(){if(!st.snd)return null;try{if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();return actx}catch(e){return null}}
+function tone(f,d,t,v){var c=audio();if(!c)return;try{var o=c.createOscillator(),g=c.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(v||0.3,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+d);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+d)}catch(e){}}
+function whistle(){var c=audio();if(!c)return;try{var o=c.createOscillator(),l=c.createOscillator(),lg=c.createGain(),g=c.createGain();o.type='triangle';o.frequency.value=2850;l.frequency.value=38;lg.gain.value=180;l.connect(lg);lg.connect(o.frequency);g.gain.setValueAtTime(0.35,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.55);o.connect(g);g.connect(c.destination);o.start();l.start();o.stop(c.currentTime+0.55);l.stop(c.currentTime+0.55)}catch(e){}}
+function fanfare(){var notes=new Array(523,659,784,1046);for(var i=0;i<notes.length;i++){(function(f,idx){setTimeout(function(){tone(f,0.3,'triangle',0.3)},idx*110)})(notes[i],i)}}
+function toggleSnd(){st.snd=st.snd?0:1;document.getElementById('sndBtn').textContent=st.snd?'🔊 ON':'🔇 OFF';if(st.snd)tone(600,0.1);save()}
+function addPt(t,d){var arr=t===0?st.pA:st.pB;var v=arr[st.cur]+d;if(v<0)return;arr[st.cur]=v;if(d>0){st.srv=t;tone(t===0?660:520,0.15)}else{tone(240,0.12)}checkWin();render();save()}
+function checkWin(){var a=st.pA[st.cur],b=st.pB[st.cur],lim=st.cur===4?15:25;if((a>=lim||b>=lim)&&Math.abs(a-b)>=2){if(!st.done){st.done=1;if(a>b)st.wA++;else st.wB++;whistle();setTimeout(fanfare,450)}}else{st.done=0}}
+function nextSet(){if(st.cur<4){st.cur++;st.done=0;st.tA=new Array(0,0);st.tB=new Array(0,0);whistle();render();save()}}
+function modSet(t,d){if(t===0)st.wA=Math.max(0,st.wA+d);else st.wB=Math.max(0,st.wB+d);render();save()}
+function setServe(t){st.srv=t;render();save()}
+function togTO(t,i){var arr=t===0?st.tA:st.tB;arr[i]=arr[i]?0:1;if(arr[i])whistle();render();save()}
+function swapSides(){st.swapped=st.swapped?0:1;var b=document.getElementById('board');b.style.webkitFlexDirection=st.swapped?'row-reverse':'row';b.style.flexDirection=st.swapped?'row-reverse':'row';save()}
+function resetAll(){if(!confirm('¿Iniciar nuevo partido?'))return;st.cur=0;st.pA=new Array(0,0,0,0,0);st.pB=new Array(0,0,0,0,0);st.wA=0;st.wB=0;st.tA=new Array(0,0);st.tB=new Array(0,0);st.done=0;whistle();render();save()}
