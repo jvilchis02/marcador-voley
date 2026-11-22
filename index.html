@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marcador de Voleibol</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>voley v1 - Marcador</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -19,7 +19,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -34,6 +34,14 @@
         header {
             text-align: center;
             margin-bottom: 15px;
+        }
+
+        .app-title {
+            font-size: 1rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 5px;
         }
 
         .set-indicator {
@@ -84,7 +92,7 @@
             font-size: 1.8rem;
             font-weight: bold;
             text-align: center;
-            width: 80%;
+            width: 75%;
             outline: none;
         }
 
@@ -93,10 +101,11 @@
         }
 
         .serve-icon {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             opacity: 0.2;
             cursor: pointer;
             transition: transform 0.2s, opacity 0.2s;
+            padding: 5px;
         }
 
         .serve-icon.active {
@@ -124,6 +133,7 @@
             line-height: 1;
             margin: 15px 0;
             cursor: pointer;
+            user-select: none;
         }
 
         .controls {
@@ -138,11 +148,12 @@
             border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.1s, opacity 0.2s;
+            touch-action: manipulation;
         }
 
         button:active {
             transform: scale(0.95);
+            opacity: 0.8;
         }
 
         .btn-plus {
@@ -174,13 +185,11 @@
         .btn-action {
             background-color: #333;
             color: white;
-            padding: 12px 20px;
+            padding: 14px 22px;
             font-size: 1rem;
         }
 
-        .btn-action:hover { background-color: #444; }
         .btn-reset { background-color: #b71c1c; }
-        .btn-reset:hover { background-color: #d32f2f; }
 
         .history {
             text-align: center;
@@ -199,6 +208,7 @@
 <body>
 
     <header>
+        <div class="app-title">voley v1</div>
         <div class="set-indicator" id="setDisplay">SET 1 (A 25 PUNTOS)</div>
     </header>
 
@@ -207,27 +217,27 @@
         <div class="team-card team-a" id="cardLeft">
             <div class="team-header">
                 <input type="text" class="team-name" id="nameLeft" value="LOCAL">
-                <span class="serve-icon active" id="serveLeft" onclick="setServe('left')" title="Indicador de saque">🏐</span>
+                <span class="serve-icon active" id="serveLeft" title="Indicador de saque">🏐</span>
             </div>
             <div class="sets-won">SETS: <span id="setsLeft">0</span></div>
-            <div class="score" id="scoreLeft" onclick="addPoint('left')">0</div>
+            <div class="score" id="scoreLeft">0</div>
             <div class="controls">
-                <button class="btn-minus" onclick="removePoint('left')">-</button>
-                <button class="btn-plus" onclick="addPoint('left')">+</button>
+                <button type="button" class="btn-minus" id="btnMinusLeft">-</button>
+                <button type="button" class="btn-plus" id="btnPlusLeft">+</button>
             </div>
         </div>
 
         <!-- Equipo Derecha -->
         <div class="team-card team-b" id="cardRight">
             <div class="team-header">
-                <span class="serve-icon" id="serveRight" onclick="setServe('right')" title="Indicador de saque">🏐</span>
+                <span class="serve-icon" id="serveRight" title="Indicador de saque">🏐</span>
                 <input type="text" class="team-name" id="nameRight" value="VISITA">
             </div>
             <div class="sets-won">SETS: <span id="setsRight">0</span></div>
-            <div class="score" id="scoreRight" onclick="addPoint('right')">0</div>
+            <div class="score" id="scoreRight">0</div>
             <div class="controls">
-                <button class="btn-plus" onclick="addPoint('right')">+</button>
-                <button class="btn-minus" onclick="removePoint('right')">-</button>
+                <button type="button" class="btn-plus" id="btnPlusRight">+</button>
+                <button type="button" class="btn-minus" id="btnMinusRight">-</button>
             </div>
         </div>
     </div>
@@ -235,92 +245,82 @@
     <div class="history" id="setHistory">Historial de sets: Ninguno</div>
 
     <div class="bottom-bar">
-        <button class="btn-action" onclick="swapSides()">⇄ Cambiar Lado</button>
-        <button class="btn-action" onclick="undo()">↩ Deshacer</button>
-        <button class="btn-action btn-reset" onclick="resetMatch()">Reiniciar Partido</button>
+        <button type="button" class="btn-action" id="btnSwap">⇄ Cambiar Lado</button>
+        <button type="button" class="btn-action" id="btnUndo">↩ Deshacer</button>
+        <button type="button" class="btn-action btn-reset" id="btnReset">Reiniciar Partido</button>
     </div>
 
     <script>
-        let state = {
-            left: { score: 0, sets: 0, colorClass: 'team-a' },
-            right: { score: 0, sets: 0, colorClass: 'team-b' },
-            serve: 'left',
-            currentSet: 1,
-            history: [],
-            undoStack: []
-        };
+        document.addEventListener('DOMContentLoaded', function() {
+            let state = {
+                left: { score: 0, sets: 0, colorClass: 'team-a' },
+                right: { score: 0, sets: 0, colorClass: 'team-b' },
+                serve: 'left',
+                currentSet: 1,
+                history: [],
+                undoStack: []
+            };
 
-        function saveState() {
-            state.undoStack.push(JSON.parse(JSON.stringify({
-                left: state.left,
-                right: state.right,
-                serve: state.serve,
-                currentSet: state.currentSet,
-                history: state.history,
-                nameLeft: document.getElementById('nameLeft').value,
-                nameRight: document.getElementById('nameRight').value
-            })));
-            if (state.undoStack.length > 20) state.undoStack.shift();
-        }
+            function saveState() {
+                state.undoStack.push(JSON.parse(JSON.stringify({
+                    left: state.left,
+                    right: state.right,
+                    serve: state.serve,
+                    currentSet: state.currentSet,
+                    history: state.history,
+                    nameLeft: document.getElementById('nameLeft').value,
+                    nameRight: document.getElementById('nameRight').value
+                })));
+                if (state.undoStack.length > 20) state.undoStack.shift();
+            }
 
-        function addPoint(side) {
-            saveState();
-            state[side].score++;
-            state.serve = side; // El equipo que anota gana el saque
-            checkSetWin();
-            updateUI();
-        }
-
-        function removePoint(side) {
-            if (state[side].score > 0) {
+            function addPoint(side) {
                 saveState();
-                state[side].score--;
+                state[side].score++;
+                state.serve = side;
+                checkSetWin();
                 updateUI();
             }
-        }
 
-        function setServe(side) {
-            state.serve = side;
-            updateUI();
-        }
-
-        function checkSetWin() {
-            const target = state.currentSet === 5 ? 15 : 25;
-            const sLeft = state.left.score;
-            const sRight = state.right.score;
-
-            if ((sLeft >= target || sRight >= target) && Math.abs(sLeft - sRight) >= 2) {
-                const winner = sLeft > sRight ? 'left' : 'right';
-                const winnerName = document.getElementById(winner === 'left' ? 'nameLeft' : 'nameRight').value;
-                
-                state[winner].sets++;
-                state.history.push(`Set ${state.currentSet}: ${sLeft}-${sRight}`);
-                
-                setTimeout(() => {
-                    alert(`¡${winnerName} gana el Set ${state.currentSet} (${sLeft} - ${sRight})!`);
-                    
-                    if (state[winner].sets === 3) {
-                        alert(`🏆 ¡${winnerName} HA GANADO EL PARTIDO! 🏆`);
-                    } else {
-                        state.currentSet++;
-                        state.left.score = 0;
-                        state.right.score = 0;
-                        swapSides(false); // Cambio de cancha automático al terminar el set
-                    }
+            function removePoint(side) {
+                if (state[side].score > 0) {
+                    saveState();
+                    state[side].score--;
                     updateUI();
-                }, 100);
+                }
             }
-        }
 
-        function swapSides(recordUndo = true) {
-            if (recordUndo) saveState();
-            
-            // Intercambiar datos
-            const temp = state.left;
-            state.left = state.right;
-            state.right = temp;
+            function setServe(side) {
+                state.serve = side;
+                updateUI();
+            }
 
-            // Intercambiar nombres
-            const nameL = document.getElementById('nameLeft').value;
-            const nameR = document.getElementById('nameRight').value;
-            document.getElementById('nameLeft').value = nameR;
+            function checkSetWin() {
+                const target = state.currentSet === 5 ? 15 : 25;
+                const sLeft = state.left.score;
+                const sRight = state.right.score;
+
+                if ((sLeft >= target || sRight >= target) && Math.abs(sLeft - sRight) >= 2) {
+                    const winner = sLeft > sRight ? 'left' : 'right';
+                    const winnerName = document.getElementById(winner === 'left' ? 'nameLeft' : 'nameRight').value;
+                    
+                    state[winner].sets++;
+                    state.history.push(`Set ${state.currentSet}: ${sLeft}-${sRight}`);
+                    
+                    setTimeout(() => {
+                        alert(`¡${winnerName} gana el Set ${state.currentSet} (${sLeft} - ${sRight})!`);
+                        
+                        if (state[winner].sets === 3) {
+                            alert(`🏆 ¡${winnerName} HA GANADO EL PARTIDO! 🏆`);
+                        } else {
+                            state.currentSet++;
+                            state.left.score = 0;
+                            state.right.score = 0;
+                            swapSides(false);
+                        }
+                        updateUI();
+                    }, 100);
+                }
+            }
+
+            function swapSides(recordUndo = true) {
