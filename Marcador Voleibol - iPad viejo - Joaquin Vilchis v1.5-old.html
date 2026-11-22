@@ -1,0 +1,244 @@
+<html lang="es"><head><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Marcador Voleibol - iPad viejo - Joaquin Vilchis v1.5-old</title>
+<style>
+/* VERSION IPAD VIEJO: sin clamp, sin svh, sin grid moderno, sin flex gap */
+*{-webkit-box-sizing:border-box;box-sizing:border-box;margin:0;padding:0;font-family:Helvetica,Arial,sans-serif}
+html{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
+body{background:#060d1f;color:#fff;min-height:100%;padding:10px;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:1100px;margin:0 auto}
+header{overflow:hidden;margin-bottom:10px}
+h1{float:left;font-size:22px;line-height:32px} h1 span{color:#ffd428}
+.badge{background:#ffd428;color:#071120;padding:7px 10px;border-radius:20px;font-weight:bold;font-size:12px;border:0;float:right;margin-left:6px}
+.badge.white{background:#fff}.badge.green{background:#22e5a8}.badge.live{background:#ff4d6d;color:#fff}
+.clear{clear:both}
+.status{text-align:center;background:#12203f;border:1px solid #26395f;padding:10px;border-radius:12px;font-weight:bold;margin:8px 0;font-size:16px}
+.status small{display:block;color:#a9badd;font-weight:normal;font-size:11px;margin-top:3px}
+.status.winner{background:#123d2a;border-color:#22e5a8}
+.teams{overflow:hidden}
+.card{float:left;width:49%;background:#0d1a33;border:3px solid #ffd428;border-radius:18px;padding:10px;text-align:center;margin-right:2%}
+.card.last{margin-right:0;border-color:#22e5a8}
+.card input[type=text]{width:100%;background:transparent;border:0;border-bottom:2px solid #ffd428;color:#fff;font-size:24px;font-weight:bold;text-align:center;padding:4px}
+.card.last input[type=text]{border-bottom-color:#22e5a8}
+.card .row{font-size:13px;margin:8px 0}
+.points{font-size:110px;line-height:1;font-weight:bold;color:#ffd428}
+.card.last .points{color:#22e5a8}
+.sets{font-size:15px;font-weight:bold}
+button{cursor:pointer;border:0;border-radius:10px;font-weight:bold;-webkit-appearance:none}
+.btn-plus{width:100%;padding:14px;font-size:22px;background:#ffd428;color:#071120}
+.card.last .btn-plus{background:#22e5a8}
+.btn-plus:disabled{opacity:.4}
+.btn-minus{width:100%;padding:8px;background:#1a2f56;color:#fff;margin-top:6px}
+.btn-set{padding:8px 12px;background:#22e5a8;color:#071120;font-size:13px}
+.btn-set:disabled{opacity:.4}
+.controls{overflow:hidden;margin-top:10px}
+.controls button{float:left;width:19%;margin-right:1.25%;background:#fff;color:#071120;padding:12px;font-size:12px}
+.controls button.last{margin-right:0}
+.controls button.whistle{background:#ffd428}
+.controls button.danger{background:#ff4d6d;color:#fff}
+.controls button.danger.armed{background:#ffb020!important;color:#071120!important}
+.panel{background:#0d1a33;border:1px solid #26395f;border-radius:16px;padding:16px;margin-top:12px}
+.panel h2{font-size:16px;margin-bottom:10px}
+.format-toggle{overflow:hidden;margin:8px 0 12px}
+.format-toggle button{float:left;width:49%;margin-right:2%;padding:11px;background:#1a2f56;color:#fff;font-size:13px}
+.format-toggle button.last{margin-right:0}
+.format-toggle button.active{background:#ffd428;color:#071120}
+.timers{overflow:hidden;max-width:720px;margin:0 auto}
+.timer-box{float:left;width:49%;margin-right:2%;background:#16294f;border-radius:12px;padding:14px 10px;text-align:center}
+.timer-box.last{margin-right:0}
+.timer-box.live{outline:2px solid #22e5a8}
+.timer-box small{display:block;color:#a9badd;font-weight:bold;font-size:11px}
+.timer{font-size:34px;font-weight:bold}
+.timer-btns{text-align:center;margin-top:10px}
+.timer-btns button{padding:10px 14px;background:#fff;color:#071120;font-size:13px;margin:0 4px}
+.timer-btns button.primary{background:#ffd428}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#555;margin-left:5px}
+.dot.on{background:#22e5a8}
+select{padding:8px;border-radius:8px;border:0}
+label{font-size:12px;color:#a9badd;font-weight:bold}
+.history{margin-top:10px;max-height:220px;overflow:auto}
+.history div{background:#16294f;padding:9px;border-radius:8px;margin-bottom:6px;font-size:13px;overflow:hidden}
+.history .l{float:left}.history .r{float:right}
+footer{text-align:center;padding:14px 6px 4px;color:#a9badd;font-size:13px;line-height:1.6}
+footer b{color:#fff}
+footer .ver{display:inline-block;background:#ffd428;color:#071120;padding:1px 10px;border-radius:20px;font-size:11px;font-weight:bold;margin-left:6px}
+.rotate-hint{display:none;text-align:center;background:#ffd428;color:#071120;font-weight:bold;font-size:12px;padding:6px;border-radius:20px;margin-bottom:6px}
+.tv{position:absolute;left:0;top:0;width:100%;min-height:100%;background:#040913;z-index:99;padding:10px;display:none}
+.tv.open{display:block}
+.tv .tgrid{overflow:hidden;margin:10px 0}
+.tv .tgrid .card{min-height:220px}
+.tv .tgrid h2{font-size:22px;white-space:nowrap;overflow:hidden}
+.tv .tgrid .points{font-size:100px}
+.tv .tv-controls{text-align:center;background:#0d1a33;border:1px solid #26395f;border-radius:12px;padding:12px;margin-top:10px}
+.tv .tv-controls button{padding:11px 16px;margin:0 4px}
+@media (max-width:700px){ .points{font-size:80px} .controls button{width:49%;margin-bottom:8px} .controls button.last{margin-right:1.25%} h1{float:none} .badge{float:none;display:inline-block;margin-top:6px} }
+@media (orientation:portrait){ .rotate-hint{display:block} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="rotate-hint">Gira tu iPad para verlo en horizontal - asi se ve mucho mejor</div>
+<header>
+<h1>MARCADOR <span>VOLEIBOL</span></h1>
+<button class="badge green" id="whistleBtn" onclick="whistleToggle()">SILBATAZO / INICIAR</button>
+<button class="badge white" id="muteBtn" onclick="toggleMute()">Sonido</button>
+<span class="badge" id="setBadge">SET 1 - A 25 - PARTIDO A 5</span>
+<span class="badge " id="clockBadge">00:00</span>
+<button class="badge white" onclick="toggleTV()">Modo TV</button>
+<div class="clear"></div>
+</header>
+<div class="status" id="status"><span id="statusMain">Empate 0 - 0</span><small id="statusSub">Gana el set quien llegue a 25 con ventaja de 2 - Set decisivo a 15 - Partido a 5 (gana con 3)</small></div>
+<div class="teams">
+<div class="card" id="card0" style="border-color: rgb(255, 212, 40);"><input type="text" id="name0" value="Equipo A" oninput="save()"><div class="row"><input type="color" id="color0" value="#ffd428" onchange="changeColor(0,this.value)"> <span id="serve0">SAQUE</span> &nbsp; SETS: <b id="sets0">0</b></div><div class="points" id="points0">0</div><button class="btn-plus" id="plus0" onclick="add(0,1)">+1 PUNTO</button><button class="btn-minus" onclick="add(0,-1)">- Quitar punto</button><div style="margin-top:8px"><button class="btn-set" id="setBtn0" onclick="awardSet(0)">Ganar set</button></div></div>
+<div class="card last" id="card1" style="border-color: rgb(34, 229, 168);"><input type="text" id="name1" value="Equipo B" oninput="save()"><div class="row"><input type="color" id="color1" value="#22e5a8" onchange="changeColor(1,this.value)"> <span id="serve1">RECIBE</span> &nbsp; SETS: <b id="sets1">0</b></div><div class="points" id="points1">0</div><button class="btn-plus" id="plus1" onclick="add(1,1)">+1 PUNTO</button><button class="btn-minus" onclick="add(1,-1)">- Quitar punto</button><div style="margin-top:8px"><button class="btn-set" id="setBtn1" onclick="awardSet(1)">Ganar set</button></div></div>
+<div class="clear"></div>
+</div>
+<div class="controls">
+<button onclick="undo()">Deshacer punto</button>
+<button onclick="changeServe()">Cambiar saque</button>
+<button class="whistle" onclick="whistleToggle()">Silbatazo</button>
+<button onclick="newSet()">Nuevo Set</button>
+<button class="danger last" id="resetBtn" onclick="resetMatch()">Reiniciar partido</button>
+<div class="clear"></div>
+</div>
+<div class="panel"><h2>CRONOMETROS</h2>
+<div class="timers">
+<div class="timer-box " id="matchBox"><small>CRONOMETRO DEL PARTIDO <span class="dot " id="matchDot"></span></small><div class="timer" id="timer">00:00</div><div class="timer-btns"><button onclick="resetMatchTimer()">Reset partido</button></div></div>
+<div class="timer-box last " id="setBox"><small>CRONOMETRO DEL SET <span class="dot " id="setDot"></span></small><div class="timer" id="setTimer">00:00</div><div class="timer-btns"><button onclick="resetSetTimer()">Reset set</button></div></div>
+<div class="clear"></div>
+</div>
+<div class="timer-btns"><button class="primary" id="timerBtn" onclick="toggleTimers()">Iniciar (los dos)</button><button onclick="stopTimers()">Detener los dos</button></div>
+<p style="color:#a9badd;font-size:13px;margin-top:12px;text-align:center"><b>Silbato:</b> 1er toque = inicia partido + set. 2do toque = pausa los dos. 3er toque = reanuda los dos.</p></div>
+<div class="panel"><h2>CONFIGURACION</h2>
+<label>Formato del partido</label>
+<div class="format-toggle"><button id="fmt3" onclick="setFormat(3)" class="">A 3 SETS - Gana con 2</button><button id="fmt5" class="active last" onclick="setFormat(5)">A 5 SETS - Gana con 3</button><div class="clear"></div></div>
+<label>Set actual</label><br><select id="setSelect" onchange="setSet(parseInt(this.value,10))"><option value="1">Set 1</option><option value="2">Set 2</option><option value="3">Set 3</option><option value="4">Set 4</option><option value="5">Set 5 (a 15)</option></select>
+<h2 style="margin-top:16px">HISTORIAL DE SETS</h2><div class="history" id="history"><i style="color:#a9badd">Aun no hay sets terminados.</i></div></div>
+<footer>Hecho por <b>Joaquin Vilchis</b><span class="ver">Version iPad viejo - v1.5-old</span><br><small>Marcador de Voleibol - 2026</small></footer>
+</div>
+<div class="tv" id="tv"><h1 style="text-align:center;float:none">MODO TV - <span id="tvSet">SET 1</span></h1><div style="text-align:center;font-size:24px;margin:10px 0">SETS <b id="tvSets">0 - 0</b></div><div style="text-align:center;font-weight:bold;color:#ffd428" id="tvWinner"></div><div style="text-align:center;font-size:18px" id="tvTimers">Partido 00:00 - Set 00:00</div><div class="tgrid"><div class="card"><h2 id="tvName0">Equipo A</h2><div class="points" id="tvPoints0">0</div><button class="btn-plus" onclick="add(0,1)">+1 PUNTO</button></div><div class="card last"><h2 id="tvName1">Equipo B</h2><div class="points" id="tvPoints1">0</div><button class="btn-plus" onclick="add(1,1)">+1 PUNTO</button></div><div class="clear"></div></div><div class="tv-controls"><button style="background:#ffd428;color:#071120" onclick="whistleToggle()">Silbatazo</button><button style="background:#fff;color:#071120" onclick="toggleTimers()">Cronometros</button><button style="background:#fff;color:#071120" onclick="toggleTV()">Salir de Modo TV</button></div><footer>Hecho por <b>Joaquin Vilchis</b><span class="ver">Version iPad viejo - v1.5-old</span><br><small>Marcador de Voleibol - 2026</small></footer></div>
+<script>
+/* VERSION IPAD VIEJO - solo ES5: sin =>, sin let/const, sin template literals, sin padStart */
+function loadState(){ try{ var raw=localStorage.getItem('voleibol'); if(raw){ return JSON.parse(raw); } }catch(e){} return null; }
+var s = loadState() || {names:['Equipo A','Equipo B'],colors:['#ffd428','#22e5a8'],points:[0,0],sets:[0,0],currentSet:1,history:[],serve:0,format:5};
+if(!s.format){ s.format=5; }
+var matchSeconds=0, setSeconds=0, timersRunning=false, timerId=null, undoStack=[];
+var resetArmed=false, resetArmTimer=null, justReset=false;
+function pad2(n){ return n<10 ? '0'+n : ''+n; }
+function fmt(sec){ return pad2(Math.floor(sec/60))+':'+pad2(sec%60); }
+function el(id){ return document.getElementById(id); }
+function updateTimerUI(){
+  el('timer').innerHTML=fmt(matchSeconds);
+  el('setTimer').innerHTML=fmt(setSeconds);
+  el('clockBadge').innerHTML=fmt(matchSeconds);
+  el('clockBadge').className='badge '+(timersRunning?'live':'');
+  el('timerBtn').innerHTML=timersRunning?'Pausar (los dos)':'Iniciar (los dos)';
+  el('whistleBtn').innerHTML=timersRunning?'SILBATAZO / PAUSA':'SILBATAZO / INICIAR';
+  el('matchDot').className='dot '+(timersRunning?'on':'');
+  el('setDot').className='dot '+(timersRunning?'on':'');
+  el('matchBox').className='timer-box '+(timersRunning?'live':'');
+  el('setBox').className='timer-box last '+(timersRunning?'live':'');
+  var tvT=el('tvTimers'); if(tvT){ tvT.innerHTML='Partido '+fmt(matchSeconds)+' - Set '+fmt(setSeconds); }
+}
+function tick(){ matchSeconds++; setSeconds++; updateTimerUI(); }
+function startTimers(){ if(timerId!==null){ clearInterval(timerId); timerId=null; } timersRunning=true; timerId=setInterval(tick,1000); updateTimerUI(); }
+function pauseTimers(){ if(timerId!==null){ clearInterval(timerId); timerId=null; } timersRunning=false; updateTimerUI(); }
+function stopTimers(){ pauseTimers(); }
+function toggleTimers(){ if(timersRunning){ pauseTimers(); } else { startTimers(); } }
+function resetMatchTimer(){ matchSeconds=0; updateTimerUI(); }
+function resetSetTimer(){ setSeconds=0; updateTimerUI(); }
+function resetAllTimers(){ if(timerId!==null){ clearInterval(timerId); timerId=null; } timersRunning=false; matchSeconds=0; setSeconds=0; updateTimerUI(); }
+var audioCtx=null, muted=false, volume=0.8;
+try{ muted = localStorage.getItem('voleibol_muted')==='1'; }catch(e){}
+function ensureAudio(){ try{ if(!audioCtx){ var AC=window.AudioContext||window.webkitAudioContext; if(AC){ audioCtx=new AC(); } } if(audioCtx && audioCtx.state==='suspended'){ audioCtx.resume(); } }catch(e){} }
+document.addEventListener('pointerdown', ensureAudio, false);
+document.addEventListener('touchstart', ensureAudio, false);
+function setsNeeded(){ return s.format===3 ? 2 : 3; }
+function target(){ return s.currentSet===s.format ? 15 : 25; }
+function winner(){ if(s.sets[0]>=setsNeeded()){ return 0; } if(s.sets[1]>=setsNeeded()){ return 1; } return -1; }
+function beep(freq,dur,type,when,vol){ if(muted){ return; } try{ ensureAudio(); if(!audioCtx){ return; } var o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type=type||'sine'; o.frequency.value=freq; var t=audioCtx.currentTime+(when||0); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.22*volume*(vol||1),t+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t+dur); o.connect(g); g.connect(audioCtx.destination); o.start(t); o.stop(t+dur+0.02); }catch(e){} }
+function playPoint(team){ beep(team===0?880:660,0.12,'sine',0,1); beep(team===0?1320:990,0.1,'sine',0.07,0.7); }
+function playDown(){ beep(400,0.15,'sine',0,1); beep(280,0.18,'sine',0.1,1); }
+function playFanfare(){ var notes=[523,659,784]; for(var i=0;i<notes.length;i++){ beep(notes[i],0.18,'triangle',i*0.13,1); } }
+function playClick(){ beep(500,0.06,'square',0,0.4); }
+function whistle(){ if(muted){ return; } try{ ensureAudio(); if(!audioCtx){ beep(2400,0.9,'square',0,1); return; } var dur=0.9; var buf=audioCtx.createBuffer(1,audioCtx.sampleRate*dur,audioCtx.sampleRate); var d=buf.getChannelData(0); for(var i=0;i<d.length;i++){ d[i]=(Math.random()*2-1)*Math.sin(i*0.35)*0.6; } var src=audioCtx.createBufferSource(); src.buffer=buf; var bp=audioCtx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=2400; bp.Q.value=8; var g=audioCtx.createGain(); var t=audioCtx.currentTime; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.35*volume,t+0.02); g.gain.setValueAtTime(0.35*volume,t+0.25); g.gain.exponentialRampToValueAtTime(0.0001,t+dur); var lfo=audioCtx.createOscillator(); lfo.frequency.value=30; var lg=audioCtx.createGain(); lg.gain.value=400; lfo.connect(lg); lg.connect(bp.frequency); src.connect(bp); bp.connect(g); g.connect(audioCtx.destination); src.start(t); lfo.start(t); lfo.stop(t+dur); }catch(e){ beep(2400,0.9,'square',0,1); } }
+function whistleToggle(){ whistle(); if(timersRunning){ pauseTimers(); el('statusMain').innerHTML='PAUSA'; } else { startTimers(); el('statusMain').innerHTML='A JUGAR!'; } }
+function toggleMute(){ muted=!muted; try{ localStorage.setItem('voleibol_muted', muted?'1':'0'); }catch(e){} el('muteBtn').innerHTML=muted?'Silencio':'Sonido'; if(!muted){ playClick(); } }
+if(muted){ el('muteBtn').innerHTML='Silencio'; }
+function save(){ s.names=[el('name0').value, el('name1').value]; try{ localStorage.setItem('voleibol', JSON.stringify(s)); }catch(e){} render(); }
+function changeColor(i,v){ s.colors[i]=v; save(); }
+function add(team,d){ if(winner()!==-1 && d===1){ return; } undoStack.push({points:[s.points[0],s.points[1]],serve:s.serve}); if(d===1 && s.serve!==team){ s.serve=team; } s.points[team]=Math.max(0, s.points[team]+d); if(d===1){ playPoint(team); } else { playDown(); } save(); }
+function undo(){ var l=undoStack.pop(); if(!l){ return; } s.points=l.points; s.serve=l.serve; playDown(); save(); }
+function changeServe(){ s.serve = s.serve===0 ? 1 : 0; playClick(); save(); }
+function awardSet(w){ if(winner()!==-1){ return; } s.sets[w]++; s.history.push({set:s.currentSet,a:s.points[0],b:s.points[1],setTime:fmt(setSeconds)}); s.points=[0,0]; s.serve=w; if(s.currentSet<s.format){ s.currentSet++; } undoStack=[]; setSeconds=0; pauseTimers(); playFanfare(); save(); }
+function newSet(){ s.points=[0,0]; undoStack=[]; setSeconds=0; pauseTimers(); playClick(); save(); }
+function resetMatch(){
+  var btn=el('resetBtn');
+  if(!resetArmed){ resetArmed=true; if(btn){ btn.innerHTML='Seguro? Toca OTRA VEZ para borrar todo'; btn.className='danger last armed'; } resetArmTimer=setTimeout(function(){ resetArmed=false; if(btn){ btn.innerHTML='Reiniciar partido'; btn.className='danger last'; } },3000); return; }
+  clearTimeout(resetArmTimer); resetArmed=false;
+  if(btn){ btn.innerHTML='Reiniciar partido'; btn.className='danger last'; }
+  if(timerId!==null){ clearInterval(timerId); timerId=null; }
+  timersRunning=false; matchSeconds=0; setSeconds=0;
+  s.points=[0,0]; s.sets=[0,0]; s.history=[]; s.currentSet=1; s.serve=0; undoStack=[];
+  try{ localStorage.removeItem('voleibol'); }catch(e){}
+  justReset=true; updateTimerUI(); playClick(); save(); setTimeout(function(){ justReset=false; },500);
+}
+function setSet(v){ s.currentSet=v; setSeconds=0; pauseTimers(); save(); }
+function setFormat(f){ if(s.format===f){ return; } s.format=f; s.points=[0,0]; s.sets=[0,0]; s.history=[]; s.currentSet=1; s.serve=0; undoStack=[]; resetAllTimers(); playClick(); save(); }
+function toggleTV(){ var tv=el('tv'); if(tv.className.indexOf('open')>=0){ tv.className='tv'; } else { tv.className='tv open'; } }
+function render(){
+ el('name0').value=s.names[0]; el('name1').value=s.names[1];
+ el('color0').value=s.colors[0]; el('color1').value=s.colors[1];
+ el('card0').style.borderColor=s.colors[0]; el('card1').style.borderColor=s.colors[1];
+ el('points0').innerHTML=s.points[0]; el('points1').innerHTML=s.points[1];
+ el('sets0').innerHTML=s.sets[0]; el('sets1').innerHTML=s.sets[1];
+ el('serve0').innerHTML = s.serve===0 ? 'SAQUE' : 'RECIBE'; el('serve1').innerHTML = s.serve===1 ? 'SAQUE' : 'RECIBE';
+ el('fmt3').className = s.format===3 ? 'active' : ''; el('fmt5').className = s.format===5 ? 'active last' : 'last';
+ var sel=el('setSelect'); sel.innerHTML=''; for(var i=1;i<=s.format;i++){ var o=document.createElement('option'); o.value=i; o.text = i===s.format ? 'Set '+i+' (a 15)' : 'Set '+i; sel.appendChild(o); } sel.value=String(Math.min(s.currentSet,s.format));
+ el('setBadge').innerHTML='SET '+s.currentSet+' - A '+target()+' - PARTIDO A '+s.format;
+ el('tvSet').innerHTML='SET '+s.currentSet; el('tvSets').innerHTML=s.sets[0]+' - '+s.sets[1];
+ el('tvName0').innerHTML=s.names[0]; el('tvName1').innerHTML=s.names[1];
+ el('tvPoints0').innerHTML=s.points[0]; el('tvPoints1').innerHTML=s.points[1];
+ var w=winner(); el('plus0').disabled = w!==-1; el('plus1').disabled = w!==-1; el('setBtn0').disabled = w!==-1; el('setBtn1').disabled = w!==-1;
+ el('tvWinner').innerHTML = w!==-1 ? 'PARTIDO TERMINADO! Gano '+s.names[w] : '';
+ var a=s.points[0], b=s.points[1], t=target(), st=el('status'), main=el('statusMain'), sub=el('statusSub');
+ if(justReset){ st.className='status'; main.innerHTML='A jugar!'; sub.innerHTML='Partido reiniciado - Toca el silbatazo para iniciar: arranca partido + set'; }
+ else if(w!==-1){ st.className='status winner'; main.innerHTML='PARTIDO TERMINADO! Gano '+s.names[w]; sub.innerHTML='Resultado final: '+s.sets[0]+' - '+s.sets[1]+' sets - Partido a '+s.format; pauseTimers(); }
+ else if(a>=t-1 && b>=t-1 && a===b){ st.className='status'; main.innerHTML='DEUCE'; sub.innerHTML='Se necesitan 2 puntos de ventaja para ganar el set'; }
+ else if(a>=t-1 && b>=t-1 && Math.abs(a-b)===1){ var ww=a>b?0:1; st.className='status'; main.innerHTML='VENTAJA '+s.names[ww]; sub.innerHTML=s.names[ww]+' esta a 1 punto de ganar el set'; }
+ else if((a>=t-1 && a>b) || (b>=t-1 && b>a)){ var ww2=a>b?0:1; st.className='status'; main.innerHTML='PUNTO DE SET - '+s.names[ww2]; sub.innerHTML=s.names[ww2]+' esta a 1 punto de ganar el set'; }
+ else if(a===b){ st.className='status'; main.innerHTML='Empate '+a+' - '+b; sub.innerHTML='Gana el set quien llegue a '+t+' con ventaja de 2 - Set decisivo a 15 - Partido a '+s.format+' (gana con '+setsNeeded()+')'; }
+ else { var ww3=a>b?0:1; st.className='status'; main.innerHTML='Va ganando '+s.names[ww3]+' '+a+' - '+b; sub.innerHTML='Gana el set quien llegue a '+t+' con ventaja de 2 - Set decisivo a 15 - Partido a '+s.format+' (gana con '+setsNeeded()+')'; }
+ var h=el('history'); if(s.history.length){ var out=''; for(var j=0;j<s.history.length;j++){ var item=s.history[j]; out+='<div><span class="l">Set '+item.set+'</span><span class="r">'+item.a+' - '+item.b+' - '+(item.a>item.b?s.names[0]:s.names[1])+' - '+(item.setTime||'')+'</span><div class="clear"></div></div>'; } h.innerHTML=out; } else { h.innerHTML='<i style="color:#a9badd">Aun no hay sets terminados.</i>'; }
+ try{ localStorage.setItem('voleibol', JSON.stringify(s)); }catch(e){} updateTimerUI();
+}
+/* Anti-zoom viejo: dblclick + gesturestart (iOS viejo si los entiende) */
+document.addEventListener('dblclick', function(e){ if(e.preventDefault){ e.preventDefault(); } }, false);
+document.addEventListener('gesturestart', function(e){ if(e.preventDefault){ e.preventDefault(); } }, false);
+render();
+</script>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script>
+
+</body></html>
