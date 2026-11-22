@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Marcador Vóley">
-<title>Marcador Voleibol Pro</title>
+<title>Marcador Voleibol v7</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-select:none;touch-action:manipulation;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 html,body{width:100%;height:100%;background:#0f172a;color:#f8fafc;overflow:hidden}
@@ -65,46 +65,138 @@ td{padding:5px 2px;border-bottom:1px solid #0f172a}
 </head>
 <body>
 <div class="bar">
-<div style="font-weight:800;font-size:15px;color:#38bdf8">🏐 VÓLEY PRO</div>
+<div style="font-weight:800;font-size:15px;color:#38bdf8">🏐 VÓLEY v7</div>
 <div style="display:-webkit-flex;display:flex;gap:6px">
-<button class="btn-top" onclick="whistle()">📣 Silbato</button>
-<button class="btn-top" id="sndBtn" onclick="toggleSnd()">🔊 ON</button>
-<button class="btn-top" onclick="swapSides()">⇄ Lado</button>
-<button class="btn-top" onclick="resetAll()">↺ Nuevo</button>
+<button type="button" class="btn-top" onclick="whistle()">📣 Silbato</button>
+<button type="button" class="btn-top" id="sndBtn" onclick="toggleSnd()">🔊 ON</button>
+<button type="button" class="btn-top" onclick="swapSides()">⇄ Lado</button>
+<button type="button" class="btn-top" onclick="resetAll()">↺ Nuevo</button>
 </div>
 </div>
 <div class="main" id="board">
 <div class="team loc" id="box0">
 <div class="t-head"><span class="serve on" id="srv0" onclick="setServe(0)">🏐</span><input class="name" id="n0" value="LOCAL" onchange="save()"></div>
 <div class="pts" id="p0" onclick="addPt(0,1)">0</div>
-<div class="ctrls"><button class="btn-p" onclick="addPt(0,1)">+1</button><button class="btn-m" onclick="addPt(0,-1)">-1</button></div>
+<div class="ctrls"><button type="button" class="btn-p" onclick="addPt(0,1)">+1</button><button type="button" class="btn-m" onclick="addPt(0,-1)">-1</button></div>
 <div class="to-row">T.O.:<div class="to-dot" id="to0_0" onclick="togTO(0,0)"></div><div class="to-dot" id="to0_1" onclick="togTO(0,1)"></div></div>
 </div>
 <div class="center">
-<div class="sets-box"><div class="sets-lbl">SETS GANADOS</div><div class="sets-num"><button class="set-btn" onclick="modSet(0,-1)">-</button><span id="s0" style="color:#60a5fa">0</span><button class="set-btn" onclick="modSet(0,1)">+</button><span style="font-size:18px;color:#475569">-</span><button class="set-btn" onclick="modSet(1,-1)">-</button><span id="s1" style="color:#f87171">0</span><button class="set-btn" onclick="modSet(1,1)">+</button></div></div>
+<div class="sets-box"><div class="sets-lbl">SETS GANADOS</div><div class="sets-num"><button type="button" class="set-btn" onclick="modSet(0,-1)">-</button><span id="s0" style="color:#60a5fa">0</span><button type="button" class="set-btn" onclick="modSet(0,1)">+</button><span style="font-size:18px;color:#475569">-</span><button type="button" class="set-btn" onclick="modSet(1,-1)">-</button><span id="s1" style="color:#f87171">0</span><button type="button" class="set-btn" onclick="modSet(1,1)">+</button></div></div>
 <div class="banner" id="winBan" onclick="nextSet()">¡Set terminado! Toca para Siguiente Set ➜</div>
-<table><thead><tr><th>Set</th><th>LOC</th><th>VIS</th></tr></thead><tbody id="hist"></tbody></table>
+<table><thead><tr><th>Set</th><th>LOC</th><th>VIS</th></tr></thead>
+<tbody>
+<tr id="r1" class="act-set"><td>S1</td><td id="a1">0</td><td id="b1">0</td></tr>
+<tr id="r2"><td>S2</td><td id="a2">0</td><td id="b2">0</td></tr>
+<tr id="r3"><td>S3</td><td id="a3">0</td><td id="b3">0</td></tr>
+<tr id="r4"><td>S4</td><td id="a4">0</td><td id="b4">0</td></tr>
+<tr id="r5"><td>S5</td><td id="a5">0</td><td id="b5">0</td></tr>
+</tbody></table>
 </div>
 <div class="team vis" id="box1">
 <div class="t-head"><span class="serve" id="srv1" onclick="setServe(1)">🏐</span><input class="name" id="n1" value="VISITANTE" onchange="save()"></div>
 <div class="pts" id="p1" onclick="addPt(1,1)">0</div>
-<div class="ctrls"><button class="btn-p" onclick="addPt(1,1)">+1</button><button class="btn-m" onclick="addPt(1,-1)">-1</button></div>
+<div class="ctrls"><button type="button" class="btn-p" onclick="addPt(1,1)">+1</button><button type="button" class="btn-m" onclick="addPt(1,-1)">-1</button></div>
 <div class="to-row">T.O.:<div class="to-dot" id="to1_0" onclick="togTO(1,0)"></div><div class="to-dot" id="to1_1" onclick="togTO(1,1)"></div></div>
 </div>
 </div>
 <script>
-let st={cur:0,sets:JSON.parse('[[0,0],[0,0],[0,0],[0,0],[0,0]]'),won:JSON.parse('[0,0]'),srv:0,to:JSON.parse('[[0,0],[0,0]]'),snd:1,swapped:0,done:0};
-let actx=null;
-function audio(){if(!st.snd)return null;try{if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();return actx}catch(e){return null}}
-function tone(f,d,t='sine',v=.3){const c=audio();if(!c)return;try{const o=c.createOscillator(),g=c.createGain();o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+d)}catch(e){}}
-function whistle(){const c=audio();if(!c)return;try{const o=c.createOscillator(),l=c.createOscillator(),lg=c.createGain(),g=c.createGain();o.type='triangle';o.frequency.value=2850;l.frequency.value=38;lg.gain.value=180;l.connect(lg);lg.connect(o.frequency);g.gain.setValueAtTime(.35,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.55);o.connect(g);g.connect(c.destination);o.start();l.start();o.stop(c.currentTime+.55);l.stop(c.currentTime+.55)}catch(e){}}
-function fanfare(){JSON.parse('[523,659,784,1046]').forEach((f,i)=>setTimeout(()=>tone(f,.3,'triangle',.3),i*110))}
-function toggleSnd(){st.snd=st.snd?0:1;document.getElementById('sndBtn').textContent=st.snd?'🔊 ON':'🔇 OFF';if(st.snd)tone(600,.1);save()}
-function addPt(t,d){let v=st.sets[st.cur][t]+d;if(v<0)return;st.sets[st.cur][t]=v;if(d>0){st.srv=t;tone(t===0?660:520,.15)}else{tone(240,.12)}checkWin();render();save()}
-function checkWin(){const a=st.sets[st.cur][0],b=st.sets[st.cur][1],lim=st.cur===4?15:25;if((a>=lim||b>=lim)&&Math.abs(a-b)>=2){if(!st.done){st.done=1;st.won[a>b?0:1]++;whistle();setTimeout(fanfare,450)}}else{st.done=0}}
-function nextSet(){if(st.cur<4){st.cur++;st.done=0;st.to=JSON.parse('[[0,0],[0,0]]');whistle();render();save()}}
-function modSet(t,d){st.won[t]=Math.max(0,st.won[t]+d);render();save()}
-function setServe(t){st.srv=t;render();save()}
-function togTO(t,i){st.to[t][i]=st.to[t][i]?0:1;if(st.to[t][i])whistle();render();save()}
-function swapSides(){st.swapped=st.swapped?0:1;const b=document.getElementById('board');b.style.webkitFlexDirection=st.swapped?'row-reverse':'row';b.style.flexDirection=st.swapped?'row-reverse':'row';save()}
-function resetAll(){if(!confirm('¿Iniciar nuevo partido?'))return;st.cur=0;st.sets=JSON.parse('[[0,0],[0,0],[0,0],[0,0],[0,0]]');st.won=JSON.parse('[0,0]');st.to=JSON.parse('[[0,0],[0,0]]');st.done=0;whistle();render();save()}
+var st = {
+  cur: 1,
+  a1: 0, a2: 0, a3: 0, a4: 0, a5: 0,
+  b1: 0, b2: 0, b3: 0, b4: 0, b5: 0,
+  w0: 0, w1: 0,
+  srv: 0,
+  to0_0: 0, to0_1: 0, to1_0: 0, to1_1: 0,
+  snd: 1, swapped: 0, done: 0
+};
+var actx = null;
+
+function audio() {
+  if (!st.snd) return null;
+  try {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    if (!actx) actx = new AC();
+    if (actx.state === 'suspended') actx.resume();
+    return actx;
+  } catch (e) { return null; }
+}
+
+function tone(f, d, t, v) {
+  var c = audio();
+  if (!c) return;
+  try {
+    var o = c.createOscillator();
+    var g = c.createGain();
+    o.type = t || 'sine';
+    o.frequency.value = f;
+    g.gain.setValueAtTime(v || 0.35, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + d);
+    o.connect(g);
+    g.connect(c.destination);
+    o.start(0);
+    o.stop(c.currentTime + d);
+  } catch (e) {}
+}
+
+function whistle() {
+  var c = audio();
+  if (!c) return;
+  try {
+    var o = c.createOscillator();
+    var l = c.createOscillator();
+    var lg = c.createGain();
+    var g = c.createGain();
+    o.type = 'triangle';
+    o.frequency.value = 2850;
+    l.frequency.value = 38;
+    lg.gain.value = 180;
+    l.connect(lg);
+    lg.connect(o.frequency);
+    g.gain.setValueAtTime(0.4, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.55);
+    o.connect(g);
+    g.connect(c.destination);
+    o.start(0);
+    l.start(0);
+    o.stop(c.currentTime + 0.55);
+    l.stop(c.currentTime + 0.55);
+  } catch (e) {}
+}
+
+function fanfare() {
+  setTimeout(function() { tone(523, 0.3, 'triangle', 0.35); }, 0);
+  setTimeout(function() { tone(659, 0.3, 'triangle', 0.35); }, 110);
+  setTimeout(function() { tone(784, 0.3, 'triangle', 0.35); }, 220);
+  setTimeout(function() { tone(1046, 0.4, 'triangle', 0.35); }, 330);
+}
+
+function toggleSnd() {
+  st.snd = st.snd ? 0 : 1;
+  document.getElementById('sndBtn').textContent = st.snd ? '🔊 ON' : '🔇 OFF';
+  if (st.snd) tone(600, 0.12);
+  save();
+}
+
+function addPt(t, d) {
+  var key = (t === 0 ? 'a' : 'b') + st.cur;
+  var v = st[key] + d;
+  if (v < 0) return;
+  st[key] = v;
+  if (d > 0) {
+    st.srv = t;
+    tone(t === 0 ? 660 : 520, 0.15);
+  } else {
+    tone(240, 0.12);
+  }
+  checkWin();
+  render();
+  save();
+}
+
+function checkWin() {
+  var a = st['a' + st.cur];
+  var b = st['b' + st.cur];
+  var lim = (st.cur === 5) ? 15 : 25;
+  if ((a >= lim || b >= lim) && Math.abs(a - b) >= 2) {
+    if (!st.done) {
