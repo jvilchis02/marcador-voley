@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Marcador Vóley">
 <title>Marcador Voleibol Pro</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif}
 html,body{width:100%;height:100%;background:#0f172a;color:#f8fafc;overflow:hidden}
 body{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;padding:10px 14px}
 .bar{display:-webkit-flex;display:flex;-webkit-justify-content:space-between;justify-content:space-between;-webkit-align-items:center;align-items:center;padding-bottom:8px;border-bottom:1px solid #1e293b;height:48px}
@@ -19,9 +19,9 @@ body{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direct
 .team.vis{border-top:6px solid #ef4444}
 .t-head{display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;width:100%;-webkit-justify-content:center;justify-content:center}
 input.name{background:transparent;border:none;border-bottom:2px dashed #475569;color:#fff;font-size:26px;font-weight:800;text-align:center;width:75%;-webkit-user-select:auto;user-select:auto}
-.serve{font-size:26px;opacity:.25;cursor:pointer;margin-right:8px}
+.serve{font-size:26px;opacity:.25;cursor:pointer;margin-right:8px;padding:4px}
 .serve.on{opacity:1}
-.pts{font-size:220px;font-weight:900;line-height:1;cursor:pointer;margin:auto 0;letter-spacing:-6px}
+.pts{font-size:220px;font-weight:900;line-height:1;cursor:pointer;margin:auto 0;letter-spacing:-6px;padding:0 20px}
 .loc .pts{color:#60a5fa}
 .vis .pts{color:#f87171}
 .ctrls{display:-webkit-flex;display:flex;width:100%;height:64px}
@@ -30,13 +30,13 @@ input.name{background:transparent;border:none;border-bottom:2px dashed #475569;c
 .vis .btn-p{background:#dc2626}
 .btn-m{-webkit-flex:1;flex:1;background:#334155;color:#cbd5e1;border:none;border-radius:12px;font-size:26px;font-weight:800;cursor:pointer}
 .to-row{display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;margin-top:10px;font-size:15px;font-weight:700;color:#94a3b8}
-.to-dot{width:24px;height:24px;border-radius:50%;background:#334155;border:2px solid #64748b;cursor:pointer;margin-left:8px}
+.to-dot{width:28px;height:28px;border-radius:50%;background:#334155;border:2px solid #64748b;cursor:pointer;margin-left:10px}
 .to-dot.used{background:#eab308;border-color:#fef08a}
 .center{-webkit-flex:0.9;flex:0.9;background:#1e293b;border-radius:16px;padding:12px;display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-justify-content:space-between;justify-content:space-between;-webkit-align-items:center;align-items:center;margin:0 4px}
 .sets-box{text-align:center;width:100%}
 .sets-lbl{font-size:13px;letter-spacing:1.5px;color:#94a3b8;font-weight:800}
 .sets-num{display:-webkit-flex;display:flex;-webkit-justify-content:center;justify-content:center;-webkit-align-items:center;align-items:center;font-size:54px;font-weight:900;margin:6px 0}
-.set-btn{background:#334155;color:#fff;border:none;border-radius:8px;width:36px;height:36px;font-size:22px;font-weight:800;margin:0 6px}
+.set-btn{background:#334155;color:#fff;border:none;border-radius:8px;width:40px;height:40px;font-size:22px;font-weight:800;margin:0 6px;cursor:pointer}
 table{width:100%;border-collapse:collapse;font-size:16px;text-align:center}
 th{color:#94a3b8;padding:5px;border-bottom:2px solid #334155}
 td{padding:7px 4px;border-bottom:1px solid #0f172a;font-weight:700}
@@ -55,9 +55,9 @@ td{padding:7px 4px;border-bottom:1px solid #0f172a;font-weight:700}
   .btn-p{font-size:20px}
   .btn-m{font-size:18px}
   .to-row{margin-top:4px;font-size:12px}
-  .to-dot{width:18px;height:18px}
+  .to-dot{width:20px;height:20px}
   .sets-num{font-size:34px;margin:2px 0}
-  .set-btn{width:26px;height:26px;font-size:16px;margin:0 4px}
+  .set-btn{width:28px;height:28px;font-size:16px;margin:0 4px}
   table{font-size:12px}
   td{padding:3px 2px}
 }
@@ -67,34 +67,35 @@ td{padding:7px 4px;border-bottom:1px solid #0f172a;font-weight:700}
 <div class="bar">
 <div style="font-weight:900;font-size:18px;color:#38bdf8">🏐 VÓLEY PRO</div>
 <div>
-<button class="btn-top" onclick="whistle()">📣 Silbato</button>
-<button class="btn-top" id="sndBtn" onclick="toggleSnd()">🔊 ON</button>
-<button class="btn-top" onclick="swapSides()">⇄ Lado</button>
-<button class="btn-top" onclick="resetAll()">↺ Nuevo</button>
+<button type="button" class="btn-top" id="btnWhistle">📣 Silbato</button>
+<button type="button" class="btn-top" id="sndBtn">🔊 ON</button>
+<button type="button" class="btn-top" id="btnSwap">⇄ Lado</button>
+<button type="button" class="btn-top" id="btnReset">↺ Nuevo</button>
 </div>
 </div>
 <div class="main" id="board">
 <div class="team loc" id="box0">
-<div class="t-head"><span class="serve on" id="srv0" onclick="setServe(0)">🏐</span><input class="name" id="n0" value="LOCAL" onchange="save()"></div>
-<div class="pts" id="p0" onclick="addPt(0,1)">0</div>
-<div class="ctrls"><button class="btn-p" onclick="addPt(0,1)">+1</button><button class="btn-m" onclick="addPt(0,-1)">-1</button></div>
-<div class="to-row">T.O.:<div class="to-dot" id="to0_0" onclick="togTO(0,0)"></div><div class="to-dot" id="to0_1" onclick="togTO(0,1)"></div></div>
+<div class="t-head"><span class="serve on" id="srv0">🏐</span><input class="name" id="n0" value="LOCAL"></div>
+<div class="pts" id="p0">0</div>
+<div class="ctrls"><button type="button" class="btn-p" id="add0">+1</button><button type="button" class="btn-m" id="sub0">-1</button></div>
+<div class="to-row">T.O.:<div class="to-dot" id="to0_0"></div><div class="to-dot" id="to0_1"></div></div>
 </div>
 <div class="center">
-<div class="sets-box"><div class="sets-lbl">SETS GANADOS</div><div class="sets-num"><button class="set-btn" onclick="modSet(0,-1)">-</button><span id="s0" style="color:#60a5fa">0</span><button class="set-btn" onclick="modSet(0,1)">+</button><span style="font-size:24px;color:#475569;margin:0 4px">-</span><button class="set-btn" onclick="modSet(1,-1)">-</button><span id="s1" style="color:#f87171">0</span><button class="set-btn" onclick="modSet(1,1)">+</button></div></div>
-<div class="banner" id="winBan" onclick="nextSet()">¡Set terminado! Toca para Siguiente Set ➜</div>
+<div class="sets-box"><div class="sets-lbl">SETS GANADOS</div><div class="sets-num"><button type="button" class="set-btn" id="sSub0">-</button><span id="s0" style="color:#60a5fa">0</span><button type="button" class="set-btn" id="sAdd0">+</button><span style="font-size:24px;color:#475569;margin:0 4px">-</span><button type="button" class="set-btn" id="sSub1">-</button><span id="s1" style="color:#f87171">0</span><button type="button" class="set-btn" id="sAdd1">+</button></div></div>
+<div class="banner" id="winBan">¡Set terminado! Toca para Siguiente Set ➜</div>
 <table><thead><tr><th>Set</th><th>LOC</th><th>VIS</th></tr></thead><tbody id="hist"></tbody></table>
 </div>
 <div class="team vis" id="box1">
-<div class="t-head"><span class="serve" id="srv1" onclick="setServe(1)">🏐</span><input class="name" id="n1" value="VISITANTE" onchange="save()"></div>
-<div class="pts" id="p1" onclick="addPt(1,1)">0</div>
-<div class="ctrls"><button class="btn-p" onclick="addPt(1,1)">+1</button><button class="btn-m" onclick="addPt(1,-1)">-1</button></div>
-<div class="to-row">T.O.:<div class="to-dot" id="to1_0" onclick="togTO(1,0)"></div><div class="to-dot" id="to1_1" onclick="togTO(1,1)"></div></div>
+<div class="t-head"><span class="serve" id="srv1">🏐</span><input class="name" id="n1" value="VISITANTE"></div>
+<div class="pts" id="p1">0</div>
+<div class="ctrls"><button type="button" class="btn-p" id="add1">+1</button><button type="button" class="btn-m" id="sub1">-1</button></div>
+<div class="to-row">T.O.:<div class="to-dot" id="to1_0"></div><div class="to-dot" id="to1_1"></div></div>
 </div>
 </div>
 <script>
-var st={cur:0,pA:new Array(0,0,0,0,0),pB:new Array(0,0,0,0,0),wA:0,wB:0,srv:0,tA:new Array(0,0),tB:new Array(0,0),snd:1,swapped:0,done:0};
+var st={cur:0,pA:new Array(0,0,0,0,0),pB:new Array(0,0,0,0,0),wA:0,wB:0,srv:0,tA:new Array(0,0),tB:new Array(0,0),snd:1,swapped:0,done:0,rstConfirm:0};
 var actx=null;
+function bindTap(id,fn){var el=document.getElementById(id);if(!el)return;var moved=false;el.addEventListener('touchstart',function(){moved=false},{passive:true});el.addEventListener('touchmove',function(){moved=true},{passive:true});el.addEventListener('touchend',function(e){if(!moved){e.preventDefault();fn()}});el.addEventListener('click',function(e){fn()})}
 function audio(){if(!st.snd)return null;try{if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();return actx}catch(e){return null}}
 function tone(f,d,t,v){var c=audio();if(!c)return;try{var o=c.createOscillator(),g=c.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(v||0.3,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+d);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+d)}catch(e){}}
 function whistle(){var c=audio();if(!c)return;try{var o=c.createOscillator(),l=c.createOscillator(),lg=c.createGain(),g=c.createGain();o.type='triangle';o.frequency.value=2850;l.frequency.value=38;lg.gain.value=180;l.connect(lg);lg.connect(o.frequency);g.gain.setValueAtTime(0.35,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.55);o.connect(g);g.connect(c.destination);o.start();l.start();o.stop(c.currentTime+0.55);l.stop(c.currentTime+0.55)}catch(e){}}
@@ -107,4 +108,3 @@ function modSet(t,d){if(t===0)st.wA=Math.max(0,st.wA+d);else st.wB=Math.max(0,st
 function setServe(t){st.srv=t;render();save()}
 function togTO(t,i){var arr=t===0?st.tA:st.tB;arr[i]=arr[i]?0:1;if(arr[i])whistle();render();save()}
 function swapSides(){st.swapped=st.swapped?0:1;var b=document.getElementById('board');b.style.webkitFlexDirection=st.swapped?'row-reverse':'row';b.style.flexDirection=st.swapped?'row-reverse':'row';save()}
-function resetAll(){if(!confirm('¿Iniciar nuevo partido?'))return;st.cur=0;st.pA=new Array(0,0,0,0,0);st.pB=new Array(0,0,0,0,0);st.wA=0;st.wB=0;st.tA=new Array(0,0);st.tB=new Array(0,0);st.done=0;whistle();render();save()}
