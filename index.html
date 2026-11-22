@@ -22,7 +22,7 @@
 </style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marcador Voleibol 🏐 — Joaquín Vilchis v1.4</title>
+<title>Marcador Voleibol 🏐 — Joaquín Vilchis v1.5</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
 body{background:#060d1f;color:#fff;min-height:100vh;padding:10px;overflow-x:hidden}
@@ -78,9 +78,35 @@ label{font-size:12px;color:#a9badd;font-weight:700}
 footer{text-align:center;padding:14px 6px 4px;color:#a9badd;font-size:13px;line-height:1.6}
 footer b{color:#fff}
 footer .ver{display:inline-block;background:#ffd428;color:#071120;padding:1px 10px;border-radius:999px;font-size:11px;font-weight:900;margin-left:6px}
-.tv{position:fixed;inset:0;background:#040913;z-index:99;padding:12px;display:none;overflow:hidden}
-.tv.open{display:flex;flex-direction:column}
-.tv .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;min-height:0}
+.tv{position:fixed;inset:0;background:#040913;z-index:99;padding:10px 12px 12px;display:none;overflow:hidden}
+.tv.open{display:flex;flex-direction:column;gap:8px}
+/* FIX ENCIMADO: cabecera, controles y footer de TV nunca se encogen ni se pisan. Solo el marcador se encoge. */
+.tv .tv-head,.tv .tv-controls,.tv footer{flex-shrink:0}
+.tv .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;min-height:0;overflow:hidden}
+.tv .tgrid .card{min-height:0;overflow:hidden;padding:8px 10px;justify-content:space-between}
+.tv .tgrid h2{font-size:clamp(16px,3vh,26px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tv .tgrid .points{font-size:clamp(56px,26svh,160px);line-height:.9;flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
+.tv .tgrid .btn-plus{min-height:46px;padding:10px;font-size:clamp(16px,2.5vh,22px)}
+.tv .tv-controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;background:#0d1a33;border:1px solid #26395f;border-radius:14px;padding:10px}
+.tv .tv-controls button{padding:12px 18px;white-space:nowrap}
+@media (orientation: landscape){
+  .tv{padding:8px 12px 10px;gap:6px}
+  .tv .tv-head h1{font-size:clamp(16px,3.5vh,24px)}
+  .tv .tv-head .tv-sets{font-size:clamp(14px,3vh,20px)!important;margin:4px 0!important}
+  .tv .tv-head #tvTimers{font-size:clamp(12px,2.8vh,18px)!important}
+  .tv .tgrid{gap:10px}
+  .tv .tgrid .points{font-size:clamp(50px,30svh,150px)}
+  .tv .tgrid .btn-plus{min-height:40px;padding:8px}
+  .tv .tv-controls{padding:8px}
+  .tv .tv-controls button{padding:9px 14px;font-size:12px}
+  .tv footer{padding:4px;font-size:11px}
+}
+@media (orientation: landscape) and (max-height:500px){
+  .tv .tv-head #tvWinner:empty{display:none}
+  .tv footer{display:none}
+  .tv .tgrid .points{font-size:clamp(48px,32svh,130px)}
+  .tv .tv-controls button{padding:8px 12px}
+}
 .rotate-hint{display:none;text-align:center;background:#ffd428;color:#071120;font-weight:900;font-size:12px;padding:6px;border-radius:999px;margin-bottom:6px}
 @media (orientation: landscape){
   body{padding:8px}.wrap{min-height:calc(100svh - 16px)}
@@ -110,12 +136,12 @@ footer .ver{display:inline-block;background:#ffd428;color:#071120;padding:1px 10
 <button class="badge green" id="whistleBtn" onclick="whistleToggle()">📯 SILBATAZO / INICIAR</button>
 <button class="badge white" id="muteBtn" onclick="toggleMute()">🔊 Sonido</button>
 <input type="range" min="0" max="100" value="80" id="vol" oninput="setVolume(this.value)" title="Volumen">
-<span class="badge" id="setBadge">SET 1 • A 25 • PARTIDO A 3</span>
+<span class="badge" id="setBadge">SET 1 • A 25 • PARTIDO A 5</span>
 <span class="badge " id="clockBadge">⏱ 00:00</span>
 <button class="badge white" onclick="toggleTV()">📺 Modo TV</button>
 </div>
 </header>
-<div class="status" id="status">¡A jugar!<small id="statusSub">Partido reiniciado • Toca el silbatazo para iniciar: arranca partido + set</small></div>
+<div class="status" id="status">Empate 0 — 0<small id="statusSub">Gana el set quien llegue a 25 con ventaja de 2 • Set decisivo a 15 • Partido a 5 (gana con 3)</small></div>
 <div class="teams">
 <div class="card" id="card0" style="--c:#ffd428"><input type="text" id="name0" value="Equipo A" oninput="save()"><div class="row"><input type="color" id="color0" value="#ffd428" oninput="changeColor(0,this.value)"> <span id="serve0">● SAQUE</span> <span class="sets">SETS: <b id="sets0">0</b></span></div><div class="points" id="points0">0</div><button class="btn-plus" id="plus0" onclick="add(0,1)">+1 PUNTO</button><button class="btn-minus" onclick="add(0,-1)">− Quitar punto</button><div style="margin-top:8px"><button class="btn-set" id="setBtn0" onclick="awardSet(0)">🏆 Ganar set</button></div></div>
 <div class="card" id="card1" style="--c:#22e5a8"><input type="text" id="name1" value="Equipo B" oninput="save()"><div class="row"><input type="color" id="color1" value="#22e5a8" oninput="changeColor(1,this.value)"> <span id="serve1">RECIBE</span> <span class="sets">SETS: <b id="sets1">0</b></span></div><div class="points" id="points1">0</div><button class="btn-plus" id="plus1" onclick="add(1,1)">+1 PUNTO</button><button class="btn-minus" onclick="add(1,-1)">− Quitar punto</button><div style="margin-top:8px"><button class="btn-set" id="setBtn1" onclick="awardSet(1)">🏆 Ganar set</button></div></div>
@@ -138,13 +164,13 @@ footer .ver{display:inline-block;background:#ffd428;color:#071120;padding:1px 10
 <p style="color:#a9badd;font-size:13px;margin-top:12px;text-align:center"><b>Silbato:</b> 1er toque = inicia partido + set. 2do toque = pausa los dos. 3er toque = reanuda los dos.</p></div>
 <div class="panel"><h2>⚙️ CONFIGURACIÓN</h2>
 <label>Formato del partido</label>
-<div class="format-toggle"><button id="fmt3" onclick="setFormat(3)" class="active">A 3 SETS<br><small>Gana con 2</small></button><button id="fmt5" class="" onclick="setFormat(5)">A 5 SETS<br><small>Gana con 3</small></button></div>
-<label>Set actual</label><br><select id="setSelect" onchange="setSet(parseInt(this.value))"><option value="1">Set 1</option><option value="2">Set 2</option><option value="3">Set 3 (a 15)</option></select>
+<div class="format-toggle"><button id="fmt3" onclick="setFormat(3)" class="">A 3 SETS<br><small>Gana con 2</small></button><button id="fmt5" class="active" onclick="setFormat(5)">A 5 SETS<br><small>Gana con 3</small></button></div>
+<label>Set actual</label><br><select id="setSelect" onchange="setSet(parseInt(this.value))"><option value="1">Set 1</option><option value="2">Set 2</option><option value="3">Set 3</option><option value="4">Set 4</option><option value="5">Set 5 (a 15)</option></select>
 <h2 style="margin-top:16px">📋 HISTORIAL DE SETS</h2><div class="history" id="history"><i style="color:#a9badd">Aún no hay sets terminados.</i></div></div>
 </div>
-<footer>Hecho por <b>Joaquín Vilchis</b><span class="ver">Versión 1.4 • v1.4</span><br><small>Marcador de Voleibol • 2026</small></footer>
+<footer>Hecho por <b>Joaquín Vilchis</b><span class="ver">Versión 1.5 • v1.5</span><br><small>Marcador de Voleibol • 2026</small></footer>
 </div>
-<div class="tv" id="tv"><h1 style="text-align:center">📺 MODO TV — <span id="tvSet">SET 1</span></h1><div style="text-align:center;font-size:26px;margin:10px 0">SETS <b id="tvSets">0 — 0</b></div><div style="text-align:center;font-weight:900;color:#ffd428" id="tvWinner"></div><div style="text-align:center;font-size:20px" id="tvTimers">⏱ Partido 00:00 • Set 00:00</div><div class="tgrid"><div class="card" style="--c:#ffd428"><h2 id="tvName0">Equipo A</h2><div class="points" id="tvPoints0">0</div><button class="btn-plus" onclick="add(0,1)">+1 PUNTO</button></div><div class="card" style="--c:#22e5a8"><h2 id="tvName1">Equipo B</h2><div class="points" id="tvPoints1">0</div><button class="btn-plus" onclick="add(1,1)">+1 PUNTO</button></div></div><div style="text-align:center;margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button style="padding:14px 20px;background:#ffd428;color:#071120" onclick="whistleToggle()">📯 Silbatazo</button><button style="padding:14px 20px;background:#fff;color:#071120" onclick="toggleTimers()">▶ / ⏸ Cronómetros</button><button style="padding:14px 20px;background:#fff;color:#071120" onclick="toggleTV()">Salir de Modo TV</button></div><footer>Hecho por <b>Joaquín Vilchis</b><span class="ver">Versión 1.4 • v1.4</span><br><small>Marcador de Voleibol • 2026</small></footer></div>
+<div class="tv" id="tv"><div class="tv-head"><h1 style="text-align:center">📺 MODO TV — <span id="tvSet">SET 1</span></h1><div class="tv-sets" style="text-align:center;font-size:26px;margin:10px 0">SETS <b id="tvSets">0 — 0</b></div><div style="text-align:center;font-weight:900;color:#ffd428" id="tvWinner"></div><div style="text-align:center;font-size:20px" id="tvTimers">⏱ Partido 00:00 • Set 00:00</div></div><div class="tgrid"><div class="card" style="--c:#ffd428"><h2 id="tvName0">Equipo A</h2><div class="points" id="tvPoints0">0</div><button class="btn-plus" onclick="add(0,1)">+1 PUNTO</button></div><div class="card" style="--c:#22e5a8"><h2 id="tvName1">Equipo B</h2><div class="points" id="tvPoints1">0</div><button class="btn-plus" onclick="add(1,1)">+1 PUNTO</button></div></div><div class="tv-controls"><button style="background:#ffd428;color:#071120" onclick="whistleToggle()">📯 Silbatazo</button><button style="background:#fff;color:#071120" onclick="toggleTimers()">▶ / ⏸ Cronómetros</button><button style="background:#fff;color:#071120" onclick="toggleTV()">Salir de Modo TV</button></div><footer>Hecho por <b>Joaquín Vilchis</b><span class="ver">Versión 1.5 • v1.5</span><br><small>Marcador de Voleibol • 2026</small></footer></div>
 <script>
 let s = JSON.parse(localStorage.getItem('voleibol')||'null') || {names:['Equipo A','Equipo B'],colors:['#ffd428','#22e5a8'],points:[0,0],sets:[0,0],currentSet:1,history:[],serve:0,format:5};
 if(!s.format) s.format=5;
