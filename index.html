@@ -22,7 +22,7 @@
 </style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marcador Voleibol 🏐 — Joaquín Vilchis v1.1</title>
+<title>Marcador Voleibol 🏐 — Joaquín Vilchis v1.4</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
 body{background:#060d1f;color:#fff;min-height:100vh;padding:10px;overflow-x:hidden}
@@ -30,13 +30,12 @@ body{background:#060d1f;color:#fff;min-height:100vh;padding:10px;overflow-x:hidd
 header{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 h1{font-size:clamp(18px,2.5vw,26px)} h1 span{color:#ffd428}
 .badge{background:#ffd428;color:#071120;padding:7px 12px;border-radius:999px;font-weight:900;font-size:12px;border:0;cursor:pointer}
-.badge.white{background:#fff}.badge.green{background:#22e5a8}
+.badge.white{background:#fff}.badge.green{background:#22e5a8}.badge.live{background:#ff4d6d;color:#fff}
 .soundbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .soundbar input{width:90px;accent-color:#ffd428}
 .status{text-align:center;background:#12203f;border:1px solid #26395f;padding:8px;border-radius:12px;font-weight:900;margin:8px 0;font-size:clamp(14px,2vw,20px)}
 .status small{display:block;color:#a9badd;font-weight:700;font-size:11px}
 .status.winner{background:#123d2a;border-color:#22e5a8}
-/* HORIZONTAL: siempre lado a lado, nunca apilado */
 .teams{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;min-height:0}
 .card{background:#0d1a33;border:3px solid var(--c);border-radius:20px;padding:10px 12px;text-align:center;display:flex;flex-direction:column;justify-content:center;min-width:0}
 .card input[type=text]{width:100%;background:transparent;border:0;border-bottom:2px solid var(--c);color:#fff;font-size:clamp(18px,3vw,28px);font-weight:900;text-align:center;padding:4px;outline:none;min-width:0}
@@ -54,40 +53,52 @@ button{cursor:pointer;border:0;border-radius:12px;font-weight:900}
 .controls button{background:#fff;color:#071120;padding:12px;font-size:13px}
 .controls button.whistle{background:#ffd428;font-size:15px}
 .controls button.danger{background:#ff4d6d;color:#fff}
-.bottom{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
-.panel{background:#0d1a33;border:1px solid #26395f;border-radius:16px;padding:12px}
-.panel h2{font-size:15px;margin-bottom:8px}
-.format-toggle{display:flex;gap:6px;margin:6px 0 10px}
-.format-toggle button{flex:1;padding:10px;background:#1a2f56;color:#fff;font-size:13px}
+.controls button.danger.armed{background:#ffb020!important;color:#071120!important}
+/* ABAJO, APILADAS, CON AIRE - ya no van lado a lado justas */
+.bottom{display:grid;grid-template-columns:1fr;gap:16px;margin-top:16px}
+.panel{background:#0d1a33;border:1px solid #26395f;border-radius:18px;padding:20px}
+.panel h2{font-size:17px;margin-bottom:12px}
+.format-toggle{display:flex;gap:8px;margin:8px 0 14px}
+.format-toggle button{flex:1;padding:12px;background:#1a2f56;color:#fff;font-size:13px}
 .format-toggle button.active{background:#ffd428;color:#071120}
-.history{margin-top:8px;display:grid;gap:6px;max-height:120px;overflow:auto}
-.history div{background:#16294f;padding:8px;border-radius:10px;display:flex;justify-content:space-between;font-size:13px}
-.timer{font-size:36px;font-weight:900;text-align:center}
-.timer-btns{display:flex;gap:8px;justify-content:center;margin-top:6px}
-.timer-btns button{padding:8px 14px;background:#fff;color:#071120}
-select,input[type=color]{padding:6px;border-radius:10px;border:0}
+.history{margin-top:10px;display:grid;gap:8px;max-height:240px;overflow:auto}
+.history div{background:#16294f;padding:10px;border-radius:10px;display:flex;justify-content:space-between;font-size:13px}
+.timers{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:760px;margin:0 auto}
+.timer-box{background:#16294f;border-radius:14px;padding:16px 12px;text-align:center;min-width:0}
+.timer-box.live{outline:2px solid #22e5a8}
+.timer-box small{display:block;color:#a9badd;font-weight:700;font-size:12px}
+.timer{font-size:clamp(28px,5vh,40px);font-weight:900;line-height:1.1;white-space:nowrap}
+.timer-btns{display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+.timer-btns button{padding:10px 14px;background:#fff;color:#071120;font-size:13px}
+.timer-btns button.primary{background:#ffd428}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#555;margin-left:5px}
+.dot.on{background:#22e5a8;box-shadow:0 0 8px #22e5a8}
+select,input[type=color]{padding:8px;border-radius:10px;border:0}
 label{font-size:12px;color:#a9badd;font-weight:700}
-footer{text-align:center;padding:12px 6px 4px;color:#a9badd;font-size:13px;line-height:1.6}
+footer{text-align:center;padding:14px 6px 4px;color:#a9badd;font-size:13px;line-height:1.6}
 footer b{color:#fff}
 footer .ver{display:inline-block;background:#ffd428;color:#071120;padding:1px 10px;border-radius:999px;font-size:11px;font-weight:900;margin-left:6px}
 .tv{position:fixed;inset:0;background:#040913;z-index:99;padding:12px;display:none;overflow:hidden}
 .tv.open{display:flex;flex-direction:column}
 .tv .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;min-height:0}
 .rotate-hint{display:none;text-align:center;background:#ffd428;color:#071120;font-weight:900;font-size:12px;padding:6px;border-radius:999px;margin-bottom:6px}
-/* ===== HORIZONTAL / LANDSCAPE ===== */
 @media (orientation: landscape){
   body{padding:8px}.wrap{min-height:calc(100svh - 16px)}
   .status{padding:5px;margin:6px 0}.status small{display:none}
   .points{font-size:clamp(70px,26svh,170px)}
-  .btn-plus{min-height:56px;padding:10px}.history{max-height:90px}.timer{font-size:30px}
+  .btn-plus{min-height:56px;padding:10px}
   .controls button{padding:9px;font-size:12px}.controls button.whistle{font-size:14px}
   footer{padding:6px;font-size:12px}
+  /* En horizontal las secciones de abajo siguen abajo y completas, nunca se esconden ni se aprietan */
+  .bottom{display:grid;grid-template-columns:1fr;gap:14px}
+  .panel{padding:16px}
+  .timer{font-size:clamp(24px,5vh,34px)}
 }
 @media (orientation: landscape) and (max-height:500px){
-  .bottom{display:none}.points{font-size:clamp(70px,30svh,150px)}
+  .points{font-size:clamp(70px,30svh,150px)}
   .card .row{margin:2px 0}.btn-minus{display:none}footer{padding:4px}
 }
-@media (max-width:700px) and (orientation:portrait){.rotate-hint{display:block!important}.controls{grid-template-columns:1fr 1fr}}
+@media (max-width:700px) and (orientation:portrait){.rotate-hint{display:block!important}.controls{grid-template-columns:1fr 1fr}.timers{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -96,14 +107,15 @@ footer .ver{display:inline-block;background:#ffd428;color:#071120;padding:1px 10
 <header>
 <h1>🏐 MARCADOR <span>VOLEIBOL</span></h1>
 <div class="soundbar">
-<button class="badge green" onclick="whistleStart()">📯 SILBATAZO / INICIAR</button>
+<button class="badge green" id="whistleBtn" onclick="whistleToggle()">📯 SILBATAZO / INICIAR</button>
 <button class="badge white" id="muteBtn" onclick="toggleMute()">🔊 Sonido</button>
 <input type="range" min="0" max="100" value="80" id="vol" oninput="setVolume(this.value)" title="Volumen">
 <span class="badge" id="setBadge">SET 1 • A 25 • PARTIDO A 3</span>
+<span class="badge " id="clockBadge">⏱ 00:00</span>
 <button class="badge white" onclick="toggleTV()">📺 Modo TV</button>
 </div>
 </header>
-<div class="status" id="status">Empate 0 — 0<small id="statusSub">Gana el set quien llegue a 25 con ventaja de 2 • Set decisivo a 15 • Partido a 3 (gana con 2)</small></div>
+<div class="status" id="status">¡A jugar!<small id="statusSub">Partido reiniciado • Toca el silbatazo para iniciar: arranca partido + set</small></div>
 <div class="teams">
 <div class="card" id="card0" style="--c:#ffd428"><input type="text" id="name0" value="Equipo A" oninput="save()"><div class="row"><input type="color" id="color0" value="#ffd428" oninput="changeColor(0,this.value)"> <span id="serve0">● SAQUE</span> <span class="sets">SETS: <b id="sets0">0</b></span></div><div class="points" id="points0">0</div><button class="btn-plus" id="plus0" onclick="add(0,1)">+1 PUNTO</button><button class="btn-minus" onclick="add(0,-1)">− Quitar punto</button><div style="margin-top:8px"><button class="btn-set" id="setBtn0" onclick="awardSet(0)">🏆 Ganar set</button></div></div>
 <div class="card" id="card1" style="--c:#22e5a8"><input type="text" id="name1" value="Equipo B" oninput="save()"><div class="row"><input type="color" id="color1" value="#22e5a8" oninput="changeColor(1,this.value)"> <span id="serve1">RECIBE</span> <span class="sets">SETS: <b id="sets1">0</b></span></div><div class="points" id="points1">0</div><button class="btn-plus" id="plus1" onclick="add(1,1)">+1 PUNTO</button><button class="btn-minus" onclick="add(1,-1)">− Quitar punto</button><div style="margin-top:8px"><button class="btn-set" id="setBtn1" onclick="awardSet(1)">🏆 Ganar set</button></div></div>
@@ -111,54 +123,114 @@ footer .ver{display:inline-block;background:#ffd428;color:#071120;padding:1px 10
 <div class="controls">
 <button onclick="undo()">↩ Deshacer punto</button>
 <button onclick="changeServe()">🔄 Cambiar saque</button>
-<button class="whistle" onclick="whistleStart()">📯 Silbatazo</button>
+<button class="whistle" onclick="whistleToggle()">📯 Silbatazo</button>
 <button onclick="newSet()">➡ Nuevo Set</button>
-<button class="danger" onclick="resetMatch()">♻ Reiniciar partido</button>
+<button class="danger" id="resetBtn" onclick="resetMatch()">♻ Reiniciar partido</button>
 </div>
+<!-- SECCIONES ABAJO, UNA DEBAJO DE LA OTRA, CON AIRE -->
 <div class="bottom">
+<div class="panel"><h2>⏱ CRONÓMETROS</h2>
+<div class="timers">
+<div class="timer-box " id="matchBox"><small>CRONÓMETRO DEL PARTIDO <span class="dot " id="matchDot"></span></small><div class="timer" id="timer">00:00</div><div class="timer-btns"><button onclick="resetMatchTimer()">Reset partido</button></div></div>
+<div class="timer-box " id="setBox"><small>CRONÓMETRO DEL SET <span class="dot " id="setDot"></span></small><div class="timer" id="setTimer">00:00</div><div class="timer-btns"><button onclick="resetSetTimer()">Reset set</button></div></div>
+</div>
+<div class="timer-btns" style="margin-top:14px"><button class="primary" id="timerBtn" onclick="toggleTimers()">▶ Iniciar (los dos)</button><button onclick="stopTimers()">⏹ Detener los dos</button></div>
+<p style="color:#a9badd;font-size:13px;margin-top:12px;text-align:center"><b>Silbato:</b> 1er toque = inicia partido + set. 2do toque = pausa los dos. 3er toque = reanuda los dos.</p></div>
 <div class="panel"><h2>⚙️ CONFIGURACIÓN</h2>
 <label>Formato del partido</label>
 <div class="format-toggle"><button id="fmt3" onclick="setFormat(3)" class="active">A 3 SETS<br><small>Gana con 2</small></button><button id="fmt5" class="" onclick="setFormat(5)">A 5 SETS<br><small>Gana con 3</small></button></div>
 <label>Set actual</label><br><select id="setSelect" onchange="setSet(parseInt(this.value))"><option value="1">Set 1</option><option value="2">Set 2</option><option value="3">Set 3 (a 15)</option></select>
-<h2 style="margin-top:14px">📋 HISTORIAL DE SETS</h2><div class="history" id="history"><i style="color:#a9badd">Aún no hay sets terminados.</i></div></div>
-<div class="panel"><h2>⏱ CRONÓMETRO DEL PARTIDO</h2><div class="timer" id="timer">00:00</div><div class="timer-btns"><button onclick="toggleTimer()" id="timerBtn">▶ Play</button><button onclick="resetTimer()">Reset</button></div><p style="color:#a9badd;font-size:13px;margin-top:10px">El saque cambia solo cuando el equipo que recibe anota. Toca el silbato para iniciar: suena y arranca el cronómetro.</p></div>
+<h2 style="margin-top:16px">📋 HISTORIAL DE SETS</h2><div class="history" id="history"><i style="color:#a9badd">Aún no hay sets terminados.</i></div></div>
 </div>
-<footer>Hecho por <b>Joaquín Vilchis</b><span class="ver">Versión 1.1 • v1.1</span><br><small>Marcador de Voleibol • 2026</small></footer>
+<footer>Hecho por <b>Joaquín Vilchis</b><span class="ver">Versión 1.4 • v1.4</span><br><small>Marcador de Voleibol • 2026</small></footer>
 </div>
-<div class="tv" id="tv"><h1 style="text-align:center">📺 MODO TV — <span id="tvSet">SET 1</span></h1><div style="text-align:center;font-size:26px;margin:10px 0">SETS <b id="tvSets">0 — 0</b></div><div style="text-align:center;font-weight:900;color:#ffd428" id="tvWinner"></div><div class="tgrid"><div class="card" style="--c:#ffd428"><h2 id="tvName0">Equipo A</h2><div class="points" id="tvPoints0">0</div><button class="btn-plus" onclick="add(0,1)">+1 PUNTO</button></div><div class="card" style="--c:#22e5a8"><h2 id="tvName1">Equipo B</h2><div class="points" id="tvPoints1">0</div><button class="btn-plus" onclick="add(1,1)">+1 PUNTO</button></div></div><div style="text-align:center;margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button style="padding:14px 20px;background:#ffd428;color:#071120" onclick="whistleStart()">📯 Silbatazo</button><button style="padding:14px 20px;background:#fff;color:#071120" onclick="toggleTV()">Salir de Modo TV</button></div><footer>Hecho por <b>Joaquín Vilchis</b><span class="ver">Versión 1.1 • v1.1</span><br><small>Marcador de Voleibol • 2026</small></footer></div>
+<div class="tv" id="tv"><h1 style="text-align:center">📺 MODO TV — <span id="tvSet">SET 1</span></h1><div style="text-align:center;font-size:26px;margin:10px 0">SETS <b id="tvSets">0 — 0</b></div><div style="text-align:center;font-weight:900;color:#ffd428" id="tvWinner"></div><div style="text-align:center;font-size:20px" id="tvTimers">⏱ Partido 00:00 • Set 00:00</div><div class="tgrid"><div class="card" style="--c:#ffd428"><h2 id="tvName0">Equipo A</h2><div class="points" id="tvPoints0">0</div><button class="btn-plus" onclick="add(0,1)">+1 PUNTO</button></div><div class="card" style="--c:#22e5a8"><h2 id="tvName1">Equipo B</h2><div class="points" id="tvPoints1">0</div><button class="btn-plus" onclick="add(1,1)">+1 PUNTO</button></div></div><div style="text-align:center;margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button style="padding:14px 20px;background:#ffd428;color:#071120" onclick="whistleToggle()">📯 Silbatazo</button><button style="padding:14px 20px;background:#fff;color:#071120" onclick="toggleTimers()">▶ / ⏸ Cronómetros</button><button style="padding:14px 20px;background:#fff;color:#071120" onclick="toggleTV()">Salir de Modo TV</button></div><footer>Hecho por <b>Joaquín Vilchis</b><span class="ver">Versión 1.4 • v1.4</span><br><small>Marcador de Voleibol • 2026</small></footer></div>
 <script>
 let s = JSON.parse(localStorage.getItem('voleibol')||'null') || {names:['Equipo A','Equipo B'],colors:['#ffd428','#22e5a8'],points:[0,0],sets:[0,0],currentSet:1,history:[],serve:0,format:5};
 if(!s.format) s.format=5;
-let undoStack=[]; let seconds=0, timerOn=false, timerId=null;
+let matchSeconds=0, setSeconds=0, timersRunning=false, timerId=null, undoStack=[];
+let resetArmed=false, resetArmTimer=null, justReset=false;
+function fmt(sec){ return String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0'); }
+function updateTimerUI(){
+  document.getElementById('timer').textContent=fmt(matchSeconds);
+  document.getElementById('setTimer').textContent=fmt(setSeconds);
+  document.getElementById('clockBadge').textContent='⏱ '+fmt(matchSeconds);
+  document.getElementById('clockBadge').className='badge '+(timersRunning?'live':'');
+  document.getElementById('timerBtn').textContent=timersRunning?'⏸ Pausar (los dos)':'▶ Iniciar (los dos)';
+  document.getElementById('whistleBtn').textContent=timersRunning?'📯 SILBATAZO / PAUSA':'📯 SILBATAZO / INICIAR';
+  document.getElementById('matchDot').className='dot '+(timersRunning?'on':'');
+  document.getElementById('setDot').className='dot '+(timersRunning?'on':'');
+  document.getElementById('matchBox').className='timer-box '+(timersRunning?'live':'');
+  document.getElementById('setBox').className='timer-box '+(timersRunning?'live':'');
+  const tvT=document.getElementById('tvTimers'); if(tvT) tvT.textContent='⏱ Partido '+fmt(matchSeconds)+' • Set '+fmt(setSeconds);
+}
+function startTimers(){
+  if(timerId!==null){ clearInterval(timerId); timerId=null; }
+  timersRunning=true;
+  timerId=setInterval(function(){ matchSeconds++; setSeconds++; updateTimerUI(); },1000);
+  updateTimerUI();
+}
+function pauseTimers(){ if(timerId!==null){ clearInterval(timerId); timerId=null; } timersRunning=false; updateTimerUI(); }
+function stopTimers(){ pauseTimers(); }
+function toggleTimers(){ if(timersRunning) pauseTimers(); else startTimers(); }
+function resetMatchTimer(){ matchSeconds=0; updateTimerUI(); }
+function resetSetTimer(){ setSeconds=0; updateTimerUI(); }
+function resetAllTimers(){ if(timerId!==null){ clearInterval(timerId); timerId=null; } timersRunning=false; matchSeconds=0; setSeconds=0; updateTimerUI(); }
 let audioCtx=null, muted = localStorage.getItem('voleibol_muted')==='1', volume=0.8;
 function ensureAudio(){ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==='suspended') audioCtx.resume(); }
 document.addEventListener('pointerdown', ensureAudio, {once:true});
 function setsNeeded(){ return s.format===3?2:3; }
 function target(){ return s.currentSet===s.format?15:25; }
 function winner(){ if(s.sets[0]>=setsNeeded()) return 0; if(s.sets[1]>=setsNeeded()) return 1; return -1; }
-function beep(freq,dur,type='sine',when=0,vol=1){ if(muted) return; try{ ensureAudio(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type=type; o.frequency.value=freq; const t=audioCtx.currentTime+when; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.22*volume*vol,t+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t+dur); o.connect(g); g.connect(audioCtx.destination); o.start(t); o.stop(t+dur+0.02);}catch(e){} }
+function beep(freq,dur,type,when,vol){ if(muted) return; try{ ensureAudio(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type=type||'sine'; o.frequency.value=freq; const t=audioCtx.currentTime+(when||0); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.22*volume*(vol||1),t+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t+dur); o.connect(g); g.connect(audioCtx.destination); o.start(t); o.stop(t+dur+0.02);}catch(e){} }
 function playPoint(team){ beep(team===0?880:660,0.12,'sine'); beep(team===0?1320:990,0.1,'sine',0.07,0.7); }
 function playDown(){ beep(400,0.15,'sine'); beep(280,0.18,'sine',0.1); }
-function playFanfare(){ [523,659,784].forEach((f,i)=>beep(f,0.18,'triangle',i*0.13)); }
+function playFanfare(){ [523,659,784].forEach(function(f,i){ beep(f,0.18,'triangle',i*0.13); }); }
 function playClick(){ beep(500,0.06,'square',0,0.4); }
 function whistle(){ if(muted) return; try{ ensureAudio(); const dur=0.9; const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*dur,audioCtx.sampleRate); const d=buf.getChannelData(0); for(let i=0;i<d.length;i++){ d[i]=(Math.random()*2-1)*Math.sin(i*0.35)*0.6; } const src=audioCtx.createBufferSource(); src.buffer=buf; const bp=audioCtx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=2400; bp.Q.value=8; const g=audioCtx.createGain(); const t=audioCtx.currentTime; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.35*volume,t+0.02); g.gain.setValueAtTime(0.35*volume,t+0.25); g.gain.exponentialRampToValueAtTime(0.0001,t+dur); const lfo=audioCtx.createOscillator(); lfo.frequency.value=30; const lg=audioCtx.createGain(); lg.gain.value=400; lfo.connect(lg); lg.connect(bp.frequency); src.connect(bp); bp.connect(g); g.connect(audioCtx.destination); src.start(t); lfo.start(t); lfo.stop(t+dur); }catch(e){ beep(2400,0.9,'square'); } }
-function whistleStart(){ whistle(); setTimeout(()=>{ if(!timerOn) toggleTimer(); const st=document.getElementById('status'); if(winner()===-1) st.firstChild.textContent='¡A JUGAR! 🏐'; },350); }
+function whistleToggle(){
+  whistle();
+  if(timersRunning){ pauseTimers(); document.getElementById('status').firstChild.textContent='⏸ PAUSA'; }
+  else { startTimers(); document.getElementById('status').firstChild.textContent='¡A JUGAR! 🏐'; }
+}
 function toggleMute(){ muted=!muted; localStorage.setItem('voleibol_muted', muted?'1':'0'); document.getElementById('muteBtn').textContent=muted?'🔇 Silencio':'🔊 Sonido'; if(!muted) playClick(); }
 function setVolume(v){ volume=v/100; }
 if(muted) document.getElementById('muteBtn').textContent='🔇 Silencio';
 function save(){ s.names=[document.getElementById('name0').value,document.getElementById('name1').value]; localStorage.setItem('voleibol',JSON.stringify(s)); render(); }
 function changeColor(i,v){ s.colors[i]=v; document.getElementById('card'+i).style.setProperty('--c',v); save(); }
-function add(team,d){ if(winner()!==-1 && d===1) return; undoStack.push({points:[...s.points],serve:s.serve}); if(d===1&&s.serve!==team) s.serve=team; s.points[team]=Math.max(0,s.points[team]+d); if(d===1){ playPoint(team); const el=document.getElementById('points'+team); el.classList.add('pop'); setTimeout(()=>el.classList.remove('pop'),180); } else playDown(); save(); }
+function add(team,d){ if(winner()!==-1 && d===1) return; undoStack.push({points:[...s.points],serve:s.serve}); if(d===1&&s.serve!==team) s.serve=team; s.points[team]=Math.max(0,s.points[team]+d); if(d===1){ playPoint(team); const el=document.getElementById('points'+team); el.classList.add('pop'); setTimeout(function(){ el.classList.remove('pop'); },180); } else playDown(); save(); }
 function undo(){ const l=undoStack.pop(); if(!l) return; s.points=l.points; s.serve=l.serve; playDown(); save(); }
 function changeServe(){ s.serve=s.serve===0?1:0; playClick(); save(); }
-function awardSet(w){ if(winner()!==-1) return; s.sets[w]++; s.history.push({set:s.currentSet,a:s.points[0],b:s.points[1]}); s.points=[0,0]; s.serve=w; if(s.currentSet<s.format) s.currentSet++; undoStack=[]; playFanfare(); save(); }
-function newSet(){ s.points=[0,0]; undoStack=[]; playClick(); save(); }
-function resetMatch(){ if(!confirm('¿Reiniciar todo el partido?')) return; s.points=[0,0]; s.sets=[0,0]; s.history=[]; s.currentSet=1; playClick(); save(); }
-function setSet(v){ s.currentSet=v; save(); }
-function setFormat(f){ if(s.format===f) return; if((s.sets[0]+s.sets[1]+s.points[0]+s.points[1]+s.history.length)>0 && !confirm('¿Cambiar formato? Esto reiniciará puntos, sets e historial pero mantiene nombres y colores.')) return; s.format=f; s.points=[0,0]; s.sets=[0,0]; s.history=[]; s.currentSet=1; undoStack=[]; playClick(); save(); }
+function awardSet(w){
+  if(winner()!==-1) return;
+  s.sets[w]++; s.history.push({set:s.currentSet,a:s.points[0],b:s.points[1],setTime:fmt(setSeconds)});
+  s.points=[0,0]; s.serve=w; if(s.currentSet<s.format) s.currentSet++; undoStack=[];
+  setSeconds=0; pauseTimers(); playFanfare(); save();
+}
+function newSet(){ s.points=[0,0]; undoStack=[]; setSeconds=0; pauseTimers(); playClick(); save(); }
+function resetMatch(){
+  const btn=document.getElementById('resetBtn');
+  if(!resetArmed){
+    resetArmed=true;
+    if(btn){ btn.textContent='⚠️ ¿Seguro? Toca OTRA VEZ para borrar todo'; btn.classList.add('armed'); }
+    resetArmTimer=setTimeout(function(){ resetArmed=false; if(btn){ btn.textContent='♻ Reiniciar partido'; btn.classList.remove('armed'); } },3000);
+    return;
+  }
+  clearTimeout(resetArmTimer); resetArmed=false;
+  if(btn){ btn.textContent='♻ Reiniciar partido'; btn.classList.remove('armed'); }
+  if(timerId!==null){ clearInterval(timerId); timerId=null; }
+  timersRunning=false; matchSeconds=0; setSeconds=0;
+  s.points=[0,0]; s.sets=[0,0]; s.history=[]; s.currentSet=1; s.serve=0;
+  undoStack=[];
+  try{ localStorage.removeItem('voleibol'); }catch(e){}
+  justReset=true;
+  updateTimerUI();
+  playClick(); save();
+  setTimeout(function(){ justReset=false; },500);
+}
+function setSet(v){ s.currentSet=v; setSeconds=0; pauseTimers(); save(); }
+function setFormat(f){ if(s.format===f) return; s.format=f; s.points=[0,0]; s.sets=[0,0]; s.history=[]; s.currentSet=1; s.serve=0; undoStack=[]; resetAllTimers(); playClick(); save(); }
 function toggleTV(){ document.getElementById('tv').classList.toggle('open'); }
-function toggleTimer(){ timerOn=!timerOn; document.getElementById('timerBtn').textContent=timerOn?'⏸ Pausa':'▶ Play'; if(timerOn&&!timerId) timerId=setInterval(()=>{seconds++; let m=String(Math.floor(seconds/60)).padStart(2,'0'), sec=String(seconds%60).padStart(2,'0'); document.getElementById('timer').textContent=m+':'+sec;},1000); if(!timerOn){clearInterval(timerId); timerId=null;} }
-function resetTimer(){ seconds=0; document.getElementById('timer').textContent='00:00'; }
 function render(){
  document.getElementById('name0').value=s.names[0]; document.getElementById('name1').value=s.names[1];
  document.getElementById('color0').value=s.colors[0]; document.getElementById('color1').value=s.colors[1];
@@ -174,15 +246,16 @@ function render(){
  document.getElementById('tvPoints0').textContent=s.points[0]; document.getElementById('tvPoints1').textContent=s.points[1];
  const w=winner(); document.getElementById('plus0').disabled=w!==-1; document.getElementById('plus1').disabled=w!==-1; document.getElementById('setBtn0').disabled=w!==-1; document.getElementById('setBtn1').disabled=w!==-1;
  document.getElementById('tvWinner').textContent = w!==-1 ? '🏆 ¡PARTIDO TERMINADO! Ganó '+s.names[w] : '';
- let [a,b]=s.points, t=target(), st=document.getElementById('status'), sub=document.getElementById('statusSub');
- if(w!==-1){ st.classList.add('winner'); st.firstChild.textContent='🏆 ¡PARTIDO TERMINADO! Ganó '+s.names[w].toUpperCase(); sub.textContent='Resultado final: '+s.sets[0]+' — '+s.sets[1]+' sets • Partido a '+s.format; }
+ let a=s.points[0], b=s.points[1], t=target(), st=document.getElementById('status'), sub=document.getElementById('statusSub');
+ if(justReset){ st.classList.remove('winner'); st.firstChild.textContent='¡A jugar!'; sub.textContent='Partido reiniciado • Toca el silbatazo para iniciar: arranca partido + set'; }
+ else if(w!==-1){ st.classList.add('winner'); st.firstChild.textContent='🏆 ¡PARTIDO TERMINADO! Ganó '+s.names[w].toUpperCase(); sub.textContent='Resultado final: '+s.sets[0]+' — '+s.sets[1]+' sets • Partido a '+s.format; pauseTimers(); }
  else if(a>=t-1&&b>=t-1&&a===b){ st.classList.remove('winner'); st.firstChild.textContent='🔥 DEUCE'; sub.textContent='Se necesitan 2 puntos de ventaja para ganar el set'; }
  else if(a>=t-1&&b>=t-1&&Math.abs(a-b)===1){ let ww=a>b?0:1; st.classList.remove('winner'); st.firstChild.textContent='⚡ VENTAJA '+s.names[ww].toUpperCase(); sub.textContent=s.names[ww]+' está a 1 punto de ganar el set'; }
  else if((a>=t-1&&a>b)||(b>=t-1&&b>a)){ let ww=a>b?0:1; st.classList.remove('winner'); st.firstChild.textContent='🏐 PUNTO DE SET — '+s.names[ww].toUpperCase(); sub.textContent=s.names[ww]+' está a 1 punto de ganar el set'; }
  else if(a===b){ st.classList.remove('winner'); st.firstChild.textContent='Empate '+a+' — '+b; sub.textContent='Gana el set quien llegue a '+t+' con ventaja de 2 • Set decisivo a 15 • Partido a '+s.format+' (gana con '+setsNeeded()+')'; }
  else { let ww=a>b?0:1; st.classList.remove('winner'); st.firstChild.textContent='Va ganando '+s.names[ww].toUpperCase()+' '+a+' — '+b; sub.textContent='Gana el set quien llegue a '+t+' con ventaja de 2 • Set decisivo a 15 • Partido a '+s.format+' (gana con '+setsNeeded()+')'; }
- document.getElementById('history').innerHTML = s.history.length? s.history.map(h=>`<div><span>Set ${h.set}</span><b>${h.a} — ${h.b}</b><span>🏆 ${h.a>h.b?s.names[0]:s.names[1]}</span></div>`).join('') : '<i style="color:#a9badd">Aún no hay sets terminados.</i>';
- localStorage.setItem('voleibol',JSON.stringify(s));
+ document.getElementById('history').innerHTML = s.history.length? s.history.map(function(h){ return '<div><span>Set '+h.set+'</span><b>'+h.a+' — '+h.b+'</b><span>🏆 '+(h.a>h.b?s.names[0]:s.names[1])+' • '+(h.setTime||'')+'</span></div>'; }).join('') : '<i style="color:#a9badd">Aún no hay sets terminados.</i>';
+ localStorage.setItem('voleibol',JSON.stringify(s)); updateTimerUI();
 }
 render();
 </script>
