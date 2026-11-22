@@ -1,92 +1,326 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Marcador Vóley">
-<title>Marcador Voleibol Pro</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-select:none;touch-action:manipulation;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
-body{background:#0f172a;color:#f8fafc;height:100dvh;display:flex;flex-direction:column;overflow:hidden;padding:10px 14px}
-.bar{display:flex;justify-content:space-between;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1px solid #1e293b}
-.btn-top{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:8px 14px;font-size:15px;font-weight:700;cursor:pointer}
-.btn-top:active{transform:scale(.95);background:#334155}
-.main{display:flex;flex:1;gap:12px;padding-top:10px;min-height:0}
-.team{flex:1.4;background:#1e293b;border-radius:16px;padding:12px 16px;display:flex;flex-direction:column;justify-content:space-between;align-items:center;border:2px solid transparent}
-.team.loc{border-top:6px solid #3b82f6}
-.team.vis{border-top:6px solid #ef4444}
-.t-head{display:flex;align-items:center;gap:10px;width:100%;justify-content:center}
-input.name{background:transparent;border:none;border-bottom:2px dashed #475569;color:#fff;font-size:clamp(22px,3.2vw,34px);font-weight:800;text-align:center;width:80%;user-select:auto;-webkit-user-select:auto}
-.serve{font-size:28px;opacity:.2;cursor:pointer}
-.serve.on{opacity:1}
-.pts{font-size:min(38vh,26vw);font-weight:900;line-height:.95;cursor:pointer;margin:auto 0;letter-spacing:-4px}
-.loc .pts{color:#60a5fa}
-.vis .pts{color:#f87171}
-.ctrls{display:flex;gap:12px;width:100%}
-.btn-p{flex:2.5;padding:16px;font-size:28px;font-weight:900;border:none;border-radius:12px;color:#fff;cursor:pointer}
-.loc .btn-p{background:#2563eb}
-.vis .btn-p{background:#dc2626}
-.btn-m{flex:1;background:#334155;color:#cbd5e1;border:none;border-radius:12px;font-size:26px;font-weight:800;cursor:pointer}
-.btn-p:active,.btn-m:active{transform:scale(.96)}
-.to-row{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:15px;font-weight:700;color:#94a3b8}
-.to-dot{width:24px;height:24px;border-radius:50%;background:#334155;border:2px solid #64748b;cursor:pointer}
-.to-dot.used{background:#eab308;border-color:#fef08a}
-.center{flex:.85;background:#1e293b;border-radius:16px;padding:12px;display:flex;flex-direction:column;justify-content:space-between;align-items:center}
-.sets-box{text-align:center;width:100%}
-.sets-lbl{font-size:13px;letter-spacing:1.5px;color:#94a3b8;font-weight:800}
-.sets-num{display:flex;justify-content:center;align-items:center;gap:12px;font-size:clamp(42px,6vh,68px);font-weight:900;margin:4px 0}
-.set-btn{background:#334155;color:#fff;border:none;border-radius:8px;width:36px;height:36px;font-size:22px;font-weight:800}
-table{width:100%;border-collapse:collapse;font-size:15px;text-align:center}
-th{color:#94a3b8;padding:4px;border-bottom:2px solid #334155}
-td{padding:6px 4px;border-bottom:1px solid #0f172a;font-weight:600}
-.act-set{background:#273549;font-weight:800;color:#38bdf8}
-.banner{background:#059669;color:#fff;padding:10px;border-radius:10px;font-size:15px;font-weight:800;text-align:center;width:100%;display:none;cursor:pointer}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcador de Voleibol</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --team-a-color: #2196F3;
+            --team-b-color: #FF5252;
+            --text-color: #ffffff;
+            --accent: #FFD700;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .set-indicator {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            letter-spacing: 2px;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            flex: 1;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 8px solid transparent;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+        }
+
+        .team-a { border-top-color: var(--team-a-color); }
+        .team-b { border-top-color: var(--team-b-color); }
+
+        .team-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .team-name {
+            background: transparent;
+            border: none;
+            border-bottom: 2px dashed #555;
+            color: var(--text-color);
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-align: center;
+            width: 80%;
+            outline: none;
+        }
+
+        .team-name:focus {
+            border-bottom-color: var(--accent);
+        }
+
+        .serve-icon {
+            font-size: 1.5rem;
+            opacity: 0.2;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        .serve-icon.active {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .sets-won {
+            font-size: 1.3rem;
+            background: #2c2c2c;
+            padding: 5px 20px;
+            border-radius: 20px;
+            margin: 10px 0;
+        }
+
+        .sets-won span {
+            font-weight: bold;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        .score {
+            font-size: 8rem;
+            font-weight: 900;
+            line-height: 1;
+            margin: 15px 0;
+            cursor: pointer;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .btn-plus {
+            font-size: 2.5rem;
+            padding: 15px 40px;
+            color: white;
+            flex: 2;
+        }
+
+        .team-a .btn-plus { background-color: var(--team-a-color); }
+        .team-b .btn-plus { background-color: var(--team-b-color); }
+
+        .btn-minus {
+            font-size: 1.8rem;
+            padding: 15px 20px;
+            background-color: #333;
+            color: #ccc;
+            flex: 1;
+        }
+
+        .bottom-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            background-color: #333;
+            color: white;
+            padding: 12px 20px;
+            font-size: 1rem;
+        }
+
+        .btn-action:hover { background-color: #444; }
+        .btn-reset { background-color: #b71c1c; }
+        .btn-reset:hover { background-color: #d32f2f; }
+
+        .history {
+            text-align: center;
+            margin-top: 15px;
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 650px) {
+            .board { grid-template-columns: 1fr; }
+            .score { font-size: 5.5rem; }
+            .team-name { font-size: 1.4rem; }
+        }
+    </style>
 </head>
 <body>
-<div class="bar">
-<div style="font-weight:900;font-size:18px;color:#38bdf8">🏐 VÓLEY PRO</div>
-<div style="display:flex;gap:8px">
-<button class="btn-top" onclick="whistle()">📣 Silbato</button>
-<button class="btn-top" id="sndBtn" onclick="toggleSnd()">🔊 ON</button>
-<button class="btn-top" onclick="swapSides()">⇄ Lado</button>
-<button class="btn-top" onclick="resetAll()">↺ Nuevo</button>
-</div>
-</div>
-<div class="main" id="board">
-<div class="team loc" id="box0">
-<div class="t-head"><span class="serve on" id="srv0" onclick="setServe(0)">🏐</span><input class="name" id="n0" value="LOCAL" onchange="save()"></div>
-<div class="pts" id="p0" onclick="addPt(0,1)">0</div>
-<div class="ctrls"><button class="btn-p" onclick="addPt(0,1)">+1</button><button class="btn-m" onclick="addPt(0,-1)">-1</button></div>
-<div class="to-row">T.O.:<div class="to-dot" id="to0_0" onclick="togTO(0,0)"></div><div class="to-dot" id="to0_1" onclick="togTO(0,1)"></div></div>
-</div>
-<div class="center">
-<div class="sets-box"><div class="sets-lbl">SETS GANADOS</div><div class="sets-num"><button class="set-btn" onclick="modSet(0,-1)">-</button><span id="s0" style="color:#60a5fa">0</span><button class="set-btn" onclick="modSet(0,1)">+</button><span style="font-size:24px;color:#475569">-</span><button class="set-btn" onclick="modSet(1,-1)">-</button><span id="s1" style="color:#f87171">0</span><button class="set-btn" onclick="modSet(1,1)">+</button></div></div>
-<div class="banner" id="winBan" onclick="nextSet()">¡Set terminado! Toca para Siguiente Set ➜</div>
-<table><thead><tr><th>Set</th><th>LOC</th><th>VIS</th></tr></thead><tbody id="hist"></tbody></table>
-</div>
-<div class="team vis" id="box1">
-<div class="t-head"><span class="serve" id="srv1" onclick="setServe(1)">🏐</span><input class="name" id="n1" value="VISITANTE" onchange="save()"></div>
-<div class="pts" id="p1" onclick="addPt(1,1)">0</div>
-<div class="ctrls"><button class="btn-p" onclick="addPt(1,1)">+1</button><button class="btn-m" onclick="addPt(1,-1)">-1</button></div>
-<div class="to-row">T.O.:<div class="to-dot" id="to1_0" onclick="togTO(1,0)"></div><div class="to-dot" id="to1_1" onclick="togTO(1,1)"></div></div>
-</div>
-</div>
-<script>
-let st={cur:0,sets:[[0,0],[0,0],[0,0],[0,0],[0,0]],won:[0,0],srv:0,to:[[0,0],[0,0]],snd:1,swapped:0,done:0};
-let actx=null;
-function audio(){if(!st.snd)return null;try{if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();return actx}catch(e){return null}}
-function tone(f,d,t='sine',v=.3){const c=audio();if(!c)return;try{const o=c.createOscillator(),g=c.createGain();o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+d)}catch(e){}}
-function whistle(){const c=audio();if(!c)return;try{const o=c.createOscillator(),l=c.createOscillator(),lg=c.createGain(),g=c.createGain();o.type='triangle';o.frequency.value=2850;l.frequency.value=38;lg.gain.value=180;l.connect(lg);lg.connect(o.frequency);g.gain.setValueAtTime(.35,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.55);o.connect(g);g.connect(c.destination);o.start();l.start();o.stop(c.currentTime+.55);l.stop(c.currentTime+.55)}catch(e){}}
-function fanfare(){[523,659,784,1046].forEach((f,i)=>setTimeout(()=>tone(f,.3,'triangle',.3),i*110))}
-function toggleSnd(){st.snd=st.snd?0:1;document.getElementById('sndBtn').textContent=st.snd?'🔊 ON':'🔇 OFF';if(st.snd)tone(600,.1);save()}
-function addPt(t,d){let v=st.sets[st.cur][t]+d;if(v<0)return;st.sets[st.cur][t]=v;if(d>0){st.srv=t;tone(t===0?660:520,.15)}else{tone(240,.12)}checkWin();render();save()}
-function checkWin(){const a=st.sets[st.cur][0],b=st.sets[st.cur][1],lim=st.cur===4?15:25;if((a>=lim||b>=lim)&&Math.abs(a-b)>=2){if(!st.done){st.done=1;st.won[a>b?0:1]++;whistle();setTimeout(fanfare,450)}}else{st.done=0}}
-function nextSet(){if(st.cur<4){st.cur++;st.done=0;st.to=[[0,0],[0,0]];whistle();render();save()}}
-function modSet(t,d){st.won[t]=Math.max(0,st.won[t]+d);render();save()}
-function setServe(t){st.srv=t;render();save()}
-function togTO(t,i){st.to[t][i]=st.to[t][i]?0:1;if(st.to[t][i])whistle();render();save()}
-function swapSides(){st.swapped=st.swapped?0:1;const b=document.getElementById('board');b.style.flexDirection=st.swapped?'row-reverse':'row';save()}
-function resetAll(){if(!confirm('¿Iniciar nuevo partido?'))return;st.cur=0;st.sets=[[0,0],[0,0],[0,0],[0,0],[0,0]];st.won=[0,0];st.to=[[0,0],[0,0]];st.done=0;whistle();render()
+
+    <header>
+        <div class="set-indicator" id="setDisplay">SET 1 (A 25 PUNTOS)</div>
+    </header>
+
+    <div class="board" id="board">
+        <!-- Equipo Izquierda -->
+        <div class="team-card team-a" id="cardLeft">
+            <div class="team-header">
+                <input type="text" class="team-name" id="nameLeft" value="LOCAL">
+                <span class="serve-icon active" id="serveLeft" onclick="setServe('left')" title="Indicador de saque">🏐</span>
+            </div>
+            <div class="sets-won">SETS: <span id="setsLeft">0</span></div>
+            <div class="score" id="scoreLeft" onclick="addPoint('left')">0</div>
+            <div class="controls">
+                <button class="btn-minus" onclick="removePoint('left')">-</button>
+                <button class="btn-plus" onclick="addPoint('left')">+</button>
+            </div>
+        </div>
+
+        <!-- Equipo Derecha -->
+        <div class="team-card team-b" id="cardRight">
+            <div class="team-header">
+                <span class="serve-icon" id="serveRight" onclick="setServe('right')" title="Indicador de saque">🏐</span>
+                <input type="text" class="team-name" id="nameRight" value="VISITA">
+            </div>
+            <div class="sets-won">SETS: <span id="setsRight">0</span></div>
+            <div class="score" id="scoreRight" onclick="addPoint('right')">0</div>
+            <div class="controls">
+                <button class="btn-plus" onclick="addPoint('right')">+</button>
+                <button class="btn-minus" onclick="removePoint('right')">-</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="history" id="setHistory">Historial de sets: Ninguno</div>
+
+    <div class="bottom-bar">
+        <button class="btn-action" onclick="swapSides()">⇄ Cambiar Lado</button>
+        <button class="btn-action" onclick="undo()">↩ Deshacer</button>
+        <button class="btn-action btn-reset" onclick="resetMatch()">Reiniciar Partido</button>
+    </div>
+
+    <script>
+        let state = {
+            left: { score: 0, sets: 0, colorClass: 'team-a' },
+            right: { score: 0, sets: 0, colorClass: 'team-b' },
+            serve: 'left',
+            currentSet: 1,
+            history: [],
+            undoStack: []
+        };
+
+        function saveState() {
+            state.undoStack.push(JSON.parse(JSON.stringify({
+                left: state.left,
+                right: state.right,
+                serve: state.serve,
+                currentSet: state.currentSet,
+                history: state.history,
+                nameLeft: document.getElementById('nameLeft').value,
+                nameRight: document.getElementById('nameRight').value
+            })));
+            if (state.undoStack.length > 20) state.undoStack.shift();
+        }
+
+        function addPoint(side) {
+            saveState();
+            state[side].score++;
+            state.serve = side; // El equipo que anota gana el saque
+            checkSetWin();
+            updateUI();
+        }
+
+        function removePoint(side) {
+            if (state[side].score > 0) {
+                saveState();
+                state[side].score--;
+                updateUI();
+            }
+        }
+
+        function setServe(side) {
+            state.serve = side;
+            updateUI();
+        }
+
+        function checkSetWin() {
+            const target = state.currentSet === 5 ? 15 : 25;
+            const sLeft = state.left.score;
+            const sRight = state.right.score;
+
+            if ((sLeft >= target || sRight >= target) && Math.abs(sLeft - sRight) >= 2) {
+                const winner = sLeft > sRight ? 'left' : 'right';
+                const winnerName = document.getElementById(winner === 'left' ? 'nameLeft' : 'nameRight').value;
+                
+                state[winner].sets++;
+                state.history.push(`Set ${state.currentSet}: ${sLeft}-${sRight}`);
+                
+                setTimeout(() => {
+                    alert(`¡${winnerName} gana el Set ${state.currentSet} (${sLeft} - ${sRight})!`);
+                    
+                    if (state[winner].sets === 3) {
+                        alert(`🏆 ¡${winnerName} HA GANADO EL PARTIDO! 🏆`);
+                    } else {
+                        state.currentSet++;
+                        state.left.score = 0;
+                        state.right.score = 0;
+                        swapSides(false); // Cambio de cancha automático al terminar el set
+                    }
+                    updateUI();
+                }, 100);
+            }
+        }
+
+        function swapSides(recordUndo = true) {
+            if (recordUndo) saveState();
+            
+            // Intercambiar datos
+            const temp = state.left;
+            state.left = state.right;
+            state.right = temp;
+
+            // Intercambiar nombres
+            const nameL = document.getElementById('nameLeft').value;
+            const nameR = document.getElementById('nameRight').value;
+            document.getElementById('nameLeft').value = nameR;
