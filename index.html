@@ -89,31 +89,4 @@ function modSet(t,d){st.won[t]=Math.max(0,st.won[t]+d);render();save()}
 function setServe(t){st.srv=t;render();save()}
 function togTO(t,i){st.to[t][i]=st.to[t][i]?0:1;if(st.to[t][i])whistle();render();save()}
 function swapSides(){st.swapped=st.swapped?0:1;const b=document.getElementById('board');b.style.flexDirection=st.swapped?'row-reverse':'row';save()}
-function resetAll(){if(!confirm('¿Iniciar nuevo partido?'))return;st.cur=0;st.sets=[[0,0],[0,0],[0,0],[0,0],[0,0]];st.won=[0,0];st.to=[[0,0],[0,0]];st.done=0;whistle();render();save()}
-function render(){
-  document.getElementById('p0').textContent=st.sets[st.cur][0];
-  document.getElementById('p1').textContent=st.sets[st.cur][1];
-  document.getElementById('s0').textContent=st.won[0];
-  document.getElementById('s1').textContent=st.won[1];
-  document.getElementById('srv0').classList.toggle('on',st.srv===0);
-  document.getElementById('srv1').classList.toggle('on',st.srv===1);
-  document.getElementById('winBan').style.display=st.done?'block':'none';
-  for(let t=0;t<2;t++){for(let i=0;i<2;i++){document.getElementById('to'+t+'_'+i).classList.toggle('used',!!st.to[t][i])}}
-  let h='';
-  for(let i=0;i<5;i++){h+='<tr class="'+(i===st.cur?'act-set':'')+'"><td>'+(i+1)+'</td><td>'+st.sets[i][0]+'</td><td>'+st.sets[i][1]+'</td></tr>'}
-  document.getElementById('hist').innerHTML=h;
-}
-function save(){
-  try{localStorage.setItem('vp',JSON.stringify({st:st,n0:document.getElementById('n0').value,n1:document.getElementById('n1').value}))}catch(e){}
-}
-function load(){
-  try{
-    const d=JSON.parse(localStorage.getItem('vp'));
-    if(d){st=d.st;document.getElementById('n0').value=d.n0||'LOCAL';document.getElementById('n1').value=d.n1||'VISITANTE';document.getElementById('sndBtn').textContent=st.snd?'🔊 ON':'🔇 OFF';document.getElementById('board').style.flexDirection=st.swapped?'row-reverse':'row'}
-  }catch(e){}
-  render();
-}
-load();
-</script>
-</body>
-</html>
+function resetAll(){if(!confirm('¿Iniciar nuevo partido?'))return;st.cur=0;st.sets=[[0,0],[0,0],[0,0],[0,0],[0,0]];st.won=[0,0];st.to=[[0,0],[0,0]];st.done=0;whistle();render()
